@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 type Props = {
   onRegister: () => void;
@@ -13,10 +14,43 @@ export default function RegisterForm({ onRegister }: Props) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Validar que el nombre solo contenga letras y espacios
+  const isValidName = (value: string) => {
+    return /^[a-záéíóúñ\s]+$/i.test(value);
+  };
+
+  // Validar que el email sea gmail
+  const isValidEmail = (value: string) => {
+    return value.endsWith("@gmail.com");
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Validaciones
+    if (!isValidName(name)) {
+      setError("El nombre debe contener solo letras y espacios");
+      setLoading(false);
+      toast.error("El nombre debe contener solo letras y espacios");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setError("El correo debe ser de Gmail (@gmail.com)");
+      setLoading(false);
+      toast.error("El correo debe ser de Gmail (@gmail.com)");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:8080/api/auth/register", {
@@ -30,9 +64,12 @@ export default function RegisterForm({ onRegister }: Props) {
         throw new Error(errorData || "Error al registrar");
       }
 
+      toast.success("¡Cuenta creada correctamente!");
       onRegister();
     } catch (err: any) {
-      setError(err.message || "Error al registrar");
+      const errorMessage = err.message || "Error al registrar";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -43,29 +80,28 @@ export default function RegisterForm({ onRegister }: Props) {
       <input
         placeholder="Nombre"
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={handleNameChange}
         className="border p-2 rounded"
         required
       />
+
       <input
         type="email"
-        placeholder="Correo"
+        placeholder="Correo (solo Gmail)"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={handleEmailChange}
         className="border p-2 rounded"
         required
       />
       <input
         type="password"
         placeholder="Contraseña"
+        autoComplete="off"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="border p-2 rounded"
         required
       />
-
-      {error && <p className="text-red-500 text-sm">{error}</p>}
-
       <button
         type="submit"
         className="bg-[#c08576] text-white p-2 rounded cursor-pointer"
@@ -73,6 +109,7 @@ export default function RegisterForm({ onRegister }: Props) {
       >
         {loading ? "Cargando..." : "Crear cuenta"}
       </button>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </form>
   );
 }

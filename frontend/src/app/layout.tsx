@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import '@/styles/globals.css'
+import ToasterProvider from '@/components/providers/toaster-provider'
 
 export const metadata: Metadata = {
   title: 'Proyecto Cerámica',
@@ -13,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="bg-[#f9f5f2]">{children}</body>
+      <body className="bg-[#f9f5f2]">
+        <ToasterProvider />
+        {children}
+      </body>
     </html>
   )
 }

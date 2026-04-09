@@ -19,6 +19,11 @@ export default function AuthModal({ onClose, onLogin }: any) {
     setMode("login");
   };
 
+  const handleLoginSuccess = (user: any) => {
+    onLogin(user);
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center" onClick={handleOverlayClick}>
       <div className="bg-white p-6 rounded-xl w-96">
@@ -54,7 +59,7 @@ export default function AuthModal({ onClose, onLogin }: any) {
 
         {/* Form dinámico */}
         {mode === "login" ? (
-          <LoginForm onLogin={onLogin} />
+          <LoginForm onLogin={handleLoginSuccess} />
         ) : (
           <RegisterForm onRegister={handleRegisterSuccess} />
         )}

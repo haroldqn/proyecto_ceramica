@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 type Props = {
   onLogin: (user: { name: string; role: string }) => void;
@@ -31,9 +32,12 @@ export default function LoginForm({ onLogin }: Props) {
 
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      toast.success(`¡Bienvenido ${data.name}!`);
       onLogin({ name: data.name, role: data.role });
     } catch (err: any) {
-      setError(err.message || "Error en el login");
+      const errorMsg = err.message || "Error en el login";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -44,6 +48,7 @@ export default function LoginForm({ onLogin }: Props) {
       <input
         type="email"
         placeholder="Correo"
+        autoComplete="off"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="border p-2 rounded"
@@ -52,13 +57,12 @@ export default function LoginForm({ onLogin }: Props) {
       <input
         type="password"
         placeholder="Contraseña"
+        autoComplete="off"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="border p-2 rounded"
         required
       />
-
-      {error && <p className="text-red-500 text-sm">{error}</p>}
 
       <button
         type="submit"
