@@ -7,8 +7,14 @@ import RegisterForm from "./register-form";
 export default function AuthModal({ onClose }: any) {
   const [mode, setMode] = useState<"login" | "register">("login");
 
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center" onClick={handleOverlayClick}>
       <div className="bg-white p-6 rounded-xl w-96">
 
         {/* Píldora */}
@@ -16,19 +22,19 @@ export default function AuthModal({ onClose }: any) {
           <button
             onClick={() => setMode("login")}
             className={`flex-1 p-2 rounded-full ${
-              mode === "login" ? "bg-blue-600 text-white" : ""
+              mode === "login" ? "bg-[#c08576] text-white" : ""
             }`}
           >
-            Login
+            Iniciar Sesión
           </button>
 
           <button
             onClick={() => setMode("register")}
             className={`flex-1 p-2 rounded-full ${
-              mode === "register" ? "bg-green-600 text-white" : ""
+              mode === "register" ? "bg-[#c08576] text-white" : ""
             }`}
           >
-            Register
+            Crear Cuenta
           </button>
         </div>
 

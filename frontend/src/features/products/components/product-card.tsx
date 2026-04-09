@@ -13,7 +13,7 @@ type Props = {
 export default function ProductCard({ producto, user, onRequireAuth }: Props) {
   const handleComprar = () => {
     if (!user) {
-      onRequireAuth(); // abre modal
+      onRequireAuth();
     } else {
       console.log("comprar producto:", producto.id);
     }
@@ -26,7 +26,7 @@ export default function ProductCard({ producto, user, onRequireAuth }: Props) {
 
       <button
         onClick={handleComprar}
-        className="mt-3 bg-blue-600 text-white px-3 py-1 rounded"
+        className="mt-3 bg-[#c08576] text-white px-3 py-1 rounded cursor-pointer"
       >
         Comprar
       </button>

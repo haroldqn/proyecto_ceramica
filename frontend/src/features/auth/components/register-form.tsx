@@ -7,7 +7,7 @@ export default function RegisterForm() {
       <input placeholder="Correo" className="border p-2 rounded" />
       <input type="password" placeholder="Contraseña" className="border p-2 rounded" />
 
-      <button className="bg-green-600 text-white p-2 rounded">
+      <button className="bg-[#c08576] text-white p-2 rounded">
         Crear cuenta
       </button>
     </form>

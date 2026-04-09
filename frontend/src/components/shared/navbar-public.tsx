@@ -9,13 +9,13 @@ export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <header className="flex justify-between p-4 bg-white shadow">
-      <h1 className="font-bold">Mi Tienda</h1>
-
+    <header className="flex justify-between p-4 bg-[#ededed] shadow">
+      <h1 className="font-bold">El mundo de Mery</h1>
+    
       {!user ? (
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-1 rounded"
+          className="bg-[#c08576] text-white px-4 py-1 rounded cursor-pointer"
         >
           Iniciar sesión
         </button>
@@ -23,7 +23,7 @@ export default function Navbar() {
         <div className="relative">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="bg-gray-200 px-3 py-1 rounded"
+            className="bg-gray-200 px-3 py-1 rounded cursor-pointer"
           >
             {user.name}
           </button>
@@ -32,7 +32,7 @@ export default function Navbar() {
             <div className="absolute right-0 mt-2 bg-white shadow rounded p-2">
               <button
                 onClick={() => setUser(null)}
-                className="text-red-500"
+                className="text-red-500 cursor-pointer"
               >
                 Cerrar sesión
               </button>
