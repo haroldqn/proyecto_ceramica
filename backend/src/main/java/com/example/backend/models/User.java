@@ -24,4 +24,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "id_role")
     private Role role ;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_persona")
+    private Persona persona;
 }

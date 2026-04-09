@@ -11,21 +11,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "clients")
-public class Client {
+@Table(name = "personas")
+public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_client")
+    @Column(name = "id_persona")
     private Long id;
 
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false, name = "names")
-    private String lastNames;
-    @Column(nullable = false, name = "last_names")
-    private String phoneNumber;
-
-    @OneToOne
-    @JoinColumn(name = "id_user")
-    private User user;
 }
