@@ -31,5 +31,5 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "id_client")
-    private Client client;
+    private Persona persona;
 }
