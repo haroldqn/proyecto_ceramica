@@ -31,6 +31,18 @@ export default function Navbar() {
     <header className="flex justify-between p-4 bg-[#ededed] shadow">
       <h1 className="font-bold">El mundo de Mery</h1>
 
+    <nav className="flex text-[#460C01] font-medium">
+      <button className="px-20 hover:rounded-lg hover:bg-[#CCCCCC] cursor-pointer">
+        Inicio
+      </button>
+      <button className="px-20 hover:rounded-lg hover:bg-[#CCCCCC] cursor-pointer">
+        Productos
+      </button>
+      <button className="px-20 hover:rounded-lg hover:bg-[#CCCCCC] cursor-pointer">
+        Contacto
+      </button>
+    </nav>
+
       {!user ? (
         <button
           onClick={() => setShowModal(true)}
@@ -42,7 +54,7 @@ export default function Navbar() {
         <div className="relative">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="bg-gray-200 px-3 py-1 rounded cursor-pointer"
+            className="hover:bg-[#CCCCCC] bg-gray-300 px-3 py-1 rounded cursor-pointer"
           >
             {user.name}
           </button>
@@ -51,7 +63,7 @@ export default function Navbar() {
             <div className="absolute right-0 mt-2 bg-white shadow rounded p-2">
               <button
                 onClick={handleLogout}
-                className="text-red-500 cursor-pointer"
+                className="px-3 py-1 hover:bg-[#CCCCCC] hover:text-[#9E665A] text-[#c08576] cursor-pointer whitespace-nowrap"
               >
                 Cerrar sesión
               </button>
