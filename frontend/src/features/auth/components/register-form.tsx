@@ -8,22 +8,77 @@ type Props = {
 };
 
 export default function RegisterForm({ onRegister }: Props) {
-  const [name, setName] = useState("");
+  const [dni, setDni] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [motherLastName, setMotherLastName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingDni, setLoadingDni] = useState(false);
 
-  const isValidName = (value: string) => /^[a-záéíóúñ\s]+$/i.test(value);
   const isValidEmail = (value: string) => value.endsWith("@gmail.com");
+  const isValidDni = (value: string) => /^\d{8}$/.test(value);
+
+  const resetPersonData = () => {
+    setFirstName("");
+    setLastName("");
+    setMotherLastName("");
+    setBirthDate("");
+  };
+
+  const handleSearchDni = async () => {
+    if (!isValidDni(dni)) {
+      const message = "El DNI debe tener 8 dígitos";
+      setError(message);
+      toast.error(message);
+      resetPersonData();
+      return;
+    }
+
+    setLoadingDni(true);
+    setError("");
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/personas/dni/${dni}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || "No se pudieron obtener los datos del DNI");
+      }
+
+      const data = await response.json();
+      setFirstName(data.firstName ?? data.nombres ?? "");
+      setLastName(data.lastName ?? data.apellidoPaterno ?? "");
+      setMotherLastName(data.motherLastName ?? data.apellidoMaterno ?? "");
+      setBirthDate(data.birthDate ?? data.fechaNacimiento ?? "");
+      toast.success("Datos del DNI cargados");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error al consultar el DNI";
+      setError(message);
+      toast.error(message);
+      resetPersonData();
+    } finally {
+      setLoadingDni(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    if (!isValidName(name)) {
-      const message = "El nombre debe contener solo letras y espacios";
+    if (!isValidDni(dni)) {
+      const message = "Debes ingresar un DNI válido de 8 dígitos";
+      setError(message);
+      setLoading(false);
+      toast.error(message);
+      return;
+    }
+
+    if (!firstName || !lastName || !motherLastName) {
+      const message = "Primero consulta el DNI para completar los datos personales";
       setError(message);
       setLoading(false);
       toast.error(message);
@@ -42,7 +97,15 @@ export default function RegisterForm({ onRegister }: Props) {
       const response = await fetch("http://localhost:8080/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          dni,
+          firstName,
+          lastName,
+          motherLastName,
+          birthDate,
+          email,
+          password,
+        }),
       });
 
       if (!response.ok) {
@@ -63,12 +126,50 @@ export default function RegisterForm({ onRegister }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <div className="flex gap-2">
+        <input
+          placeholder="DNI"
+          value={dni}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, "").slice(0, 8);
+            setDni(value);
+            resetPersonData();
+          }}
+          className="flex-1 rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
+          required
+        />
+        <button
+          type="button"
+          onClick={handleSearchDni}
+          className="cursor-pointer rounded-2xl border border-[rgba(78,54,39,0.14)] bg-white px-4 py-3 text-sm font-semibold text-[--foreground] transition hover:border-[--accent] hover:text-[--accent]"
+          disabled={loadingDni}
+        >
+          {loadingDni ? "Buscando..." : "Buscar"}
+        </button>
+      </div>
       <input
-        placeholder="Nombre"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
-        required
+        placeholder="Nombres"
+        value={firstName}
+        readOnly
+        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#f4eee8] px-4 py-3 text-[--foreground] outline-none"
+      />
+      <input
+        placeholder="Apellido paterno"
+        value={lastName}
+        readOnly
+        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#f4eee8] px-4 py-3 text-[--foreground] outline-none"
+      />
+      <input
+        placeholder="Apellido materno"
+        value={motherLastName}
+        readOnly
+        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#f4eee8] px-4 py-3 text-[--foreground] outline-none"
+      />
+      <input
+        placeholder="Fecha de nacimiento"
+        value={birthDate}
+        readOnly
+        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#f4eee8] px-4 py-3 text-[--foreground] outline-none"
       />
       <input
         type="email"
