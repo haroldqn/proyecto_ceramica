@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -14,41 +14,27 @@ export default function RegisterForm({ onRegister }: Props) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Validar que el nombre solo contenga letras y espacios
-  const isValidName = (value: string) => {
-    return /^[a-záéíóúñ\s]+$/i.test(value);
-  };
-
-  // Validar que el email sea gmail
-  const isValidEmail = (value: string) => {
-    return value.endsWith("@gmail.com");
-  };
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  const isValidName = (value: string) => /^[a-záéíóúñ\s]+$/i.test(value);
+  const isValidEmail = (value: string) => value.endsWith("@gmail.com");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // Validaciones
     if (!isValidName(name)) {
-      setError("El nombre debe contener solo letras y espacios");
+      const message = "El nombre debe contener solo letras y espacios";
+      setError(message);
       setLoading(false);
-      toast.error("El nombre debe contener solo letras y espacios");
+      toast.error(message);
       return;
     }
 
     if (!isValidEmail(email)) {
-      setError("El correo debe ser de Gmail (@gmail.com)");
+      const message = "El correo debe ser de Gmail (@gmail.com)";
+      setError(message);
       setLoading(false);
-      toast.error("El correo debe ser de Gmail (@gmail.com)");
+      toast.error(message);
       return;
     }
 
@@ -66,8 +52,8 @@ export default function RegisterForm({ onRegister }: Props) {
 
       toast.success("¡Cuenta creada correctamente!");
       onRegister();
-    } catch (err: any) {
-      const errorMessage = err.message || "Error al registrar";
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Error al registrar";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -80,17 +66,16 @@ export default function RegisterForm({ onRegister }: Props) {
       <input
         placeholder="Nombre"
         value={name}
-        onChange={handleNameChange}
-        className="border p-2 rounded"
+        onChange={(e) => setName(e.target.value)}
+        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
         required
       />
-
       <input
         type="email"
         placeholder="Correo (solo Gmail)"
         value={email}
-        onChange={handleEmailChange}
-        className="border p-2 rounded"
+        onChange={(e) => setEmail(e.target.value)}
+        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
         required
       />
       <input
@@ -99,17 +84,17 @@ export default function RegisterForm({ onRegister }: Props) {
         autoComplete="off"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="border p-2 rounded"
+        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
         required
       />
       <button
         type="submit"
-        className="bg-[#c08576] text-white p-2 rounded cursor-pointer"
+        className="mt-2 cursor-pointer rounded-full bg-[--foreground] p-3 font-semibold text-white transition hover:bg-[--accent]"
         disabled={loading}
       >
         {loading ? "Cargando..." : "Crear cuenta"}
       </button>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </form>
   );
 }

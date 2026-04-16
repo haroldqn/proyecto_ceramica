@@ -1,1 +1,92 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
+
+:root {
+  --background: #f6efe8;
+  --surface: rgba(255, 251, 247, 0.88);
+  --surface-strong: #f1e5da;
+  --foreground: #2d211b;
+  --muted: #70594b;
+  --accent: #a56f53;
+  --border-soft: rgba(117, 85, 64, 0.16);
+  --border-strong: rgba(80, 54, 38, 0.3);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  font-family: var(--font-body), sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 28%),
+    linear-gradient(180deg, #fbf6f1 0%, var(--background) 52%, #f0e4d8 100%);
+  color: var(--foreground);
+}
+
+a,
+button {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.font-display {
+  font-family: var(--font-display), serif;
+}
+
+.hero-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 12%, rgba(214, 184, 158, 0.2), transparent 18%),
+    radial-gradient(circle at 80% 20%, rgba(171, 119, 87, 0.16), transparent 20%),
+    radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.75), transparent 32%);
+  pointer-events: none;
+}
+
+.ceramic-shape {
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(244, 231, 220, 0.76));
+  box-shadow:
+    inset -10px -16px 22px rgba(144, 92, 66, 0.12),
+    inset 16px 18px 18px rgba(255, 255, 255, 0.46),
+    0 24px 35px rgba(102, 72, 53, 0.18);
+}
+
+.ceramic-shape-tall {
+  height: 280px;
+  border-radius: 45% 45% 38% 38% / 30% 30% 55% 55%;
+}
+
+.ceramic-shape-small {
+  height: 140px;
+  width: 112px;
+  border-radius: 45% 45% 40% 40% / 38% 38% 50% 50%;
+}
+
+.ceramic-shape-arch {
+  height: 200px;
+  width: 120px;
+  border-radius: 45% 45% 26% 26% / 58% 58% 22% 22%;
+}
+
+@media (max-width: 768px) {
+  .ceramic-shape-tall {
+    height: 220px;
+  }
+
+  .ceramic-shape-arch {
+    height: 170px;
+    width: 100px;
+  }
+}
