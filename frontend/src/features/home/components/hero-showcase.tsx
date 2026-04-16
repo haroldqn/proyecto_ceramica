@@ -28,7 +28,7 @@
         </div>
         <div className="hidden h-14 w-px bg-white/25 md:block" />
         <p className="max-w-56 text-sm leading-6 text-white/82">
-          Tus productos ahora se muestran con video real, sin sonido y con una presentación más profesional.
+          Observa cómo una idea se convierte en una pieza única de cerámica.
         </p>
       </div>
     </div>

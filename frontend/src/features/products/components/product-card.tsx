@@ -56,7 +56,7 @@ export default function ProductCard({ producto, user, onRequireAuth }: Props) {
             <h3 className="font-display text-3xl text-[--foreground]">{producto.nombre}</h3>
             <p className="mt-1 text-sm text-[--muted]">{producto.formato}</p>
           </div>
-          <p className="text-base font-semibold text-[--foreground]">S/ {producto.precio}</p>
+          <p className="text-base font-semibold text-[--foreground]">S/{producto.precio}</p>
         </div>
 
         <p className="text-sm leading-6 text-[--muted]">{producto.descripcion}</p>

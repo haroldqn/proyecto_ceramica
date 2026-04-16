@@ -190,7 +190,7 @@ export default function RegisterForm({ onRegister }: Props) {
       />
       <button
         type="submit"
-        className="mt-2 cursor-pointer rounded-full bg-[--foreground] p-3 font-semibold text-white transition hover:bg-[--accent]"
+        className="mt-2 cursor-pointer rounded-full bg-[--foreground] p-3 font-semibold text-black transition hover:bg-[--accent]"
         disabled={loading}
       >
         {loading ? "Cargando..." : "Crear cuenta"}

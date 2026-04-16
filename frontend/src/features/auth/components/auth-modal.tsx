@@ -50,7 +50,7 @@ export default function AuthModal({ onClose, onLogin }: AuthModalProps) {
               setSuccessMessage("");
             }}
             className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
-              mode === "login" ? "bg-[--accent] text-white" : "text-[--muted]"
+              mode === "login" ? "bg-[--accent] text-black" : "text-[--muted]"
             }`}
           >
             Iniciar sesión
@@ -62,14 +62,14 @@ export default function AuthModal({ onClose, onLogin }: AuthModalProps) {
               setSuccessMessage("");
             }}
             className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
-              mode === "register" ? "bg-[--accent] text-bl" : "text-[--muted]"
+              mode === "register" ? "bg-[--accent] text-black" : "text-[--muted]"
             }`}
           >
             Crear cuenta
           </button>
         </div>
 
-        {successMessage && <p className="mb-3 text-sm text-green-700">{successMessage}</p>}
+        {/* {successMessage && <p className="mb-3 text-sm text-green-700">{successMessage}</p>} */}
 
         {mode === "login" ? (
           <LoginForm onLogin={handleLoginSuccess} />

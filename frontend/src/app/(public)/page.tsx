@@ -30,7 +30,7 @@ export default function Home() {
 
               <div className="space-y-6">
                 <h1 className="max-w-3xl font-display text-6xl leading-[0.92] text-[--foreground] md:text-7xl lg:text-8xl">
-                  Cerámica minimalista para espacios con alma.
+                  Creamos cerámica. Tú defines el estilo.
                 </h1>
                 <p className="max-w-xl text-base leading-8 text-[--muted] md:text-lg">
                   Diseñamos vasijas, figuras y piezas decorativas de sobremesa con una
@@ -64,7 +64,7 @@ export default function Home() {
                   <p className="text-xs uppercase tracking-[0.24em] text-[--muted]">
                     Acabado
                   </p>
-                  <p className="mt-3 font-display text-4xl text-[--foreground]">Mate</p>
+                  <p className="mt-3 font-display text-4xl text-[--foreground]">Brillante </p>
                 </div>
                 <div className="rounded-[1.5rem] border border-[--border-soft] bg-white/80 p-4">
                   <p className="text-xs uppercase tracking-[0.24em] text-[--muted]">
@@ -84,7 +84,7 @@ export default function Home() {
             <SectionHeading
               eyebrow="Colecciones"
               title="Una tienda pensada como galería doméstica."
-              description="La propuesta visual parte de bloques amplios, aire entre elementos y una paleta tierra que transmite calma. Cada categoría tiene jerarquía propia para facilitar la exploración."
+              description="Explora nuestras categorías y encuentra la pieza de cerámica perfecta para ti."
             />
 
             <div className="grid gap-6 md:grid-cols-3">
@@ -100,7 +100,7 @@ export default function Home() {
             <SectionHeading
               eyebrow="Destacados"
               title="Productos con lenguaje limpio y carácter artesanal."
-              description="Las tarjetas priorizan respiración visual, microjerarquías claras y llamadas a la acción consistentes. Así el catálogo se siente premium sin perder legibilidad."
+              description="Descubre piezas únicas de cerámica, creadas para decorar y dar vida a tus espacios."
             />
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -126,20 +126,19 @@ export default function Home() {
                 Del barro al objeto decorativo sin exceso visual.
               </h2>
               <p className="mt-5 max-w-xl text-base leading-8 text-[--muted]">
-                La interfaz usa composiciones editoriales, mucho blanco respirable y
-                acentos cálidos para acompañar el producto en lugar de competir con él.
+                De la idea a la pieza final, cada etapa está cuidada para lograr un resultado único y hecho a mano.
               </p>
               <div className="mt-10 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-[1.75rem] bg-white/75 p-5">
                   <p className="font-display text-3xl text-[--foreground]">01</p>
                   <p className="mt-2 text-sm leading-6 text-[--muted]">
-                    Moldeo y curado lento para conservar texturas suaves.
+                    Damos forma a cada pieza desde cero, cuidando cada detalle en el modelado.
                   </p>
                 </div>
                 <div className="rounded-[1.75rem] bg-white/75 p-5">
                   <p className="font-display text-3xl text-[--foreground]">02</p>
                   <p className="mt-2 text-sm leading-6 text-[--muted]">
-                    Paleta neutra para facilitar combinaciones en interiores modernos.
+                    Aplicamos color y acabados que resaltan el carácter artesanal de cada pieza.
                   </p>
                 </div>
               </div>

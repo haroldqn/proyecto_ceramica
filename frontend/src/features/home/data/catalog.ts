@@ -106,17 +106,17 @@ export const featuredProducts: FeaturedProduct[] = [
 export const brandValues: BrandValue[] = [
   {
     id: 1,
-    title: "Diseño honesto",
-    description: "Cada pieza se muestra con protagonismo real, con fotografías que resaltan color, brillo y textura artesanal.",
+    title: "Diseño con intención",
+    description: "Cada pieza es pensada para destacar, combinando estética y funcionalidad.",
   },
   {
     id: 2,
-    title: "Presentación cuidada",
-    description: "Elevamos tus fotos con marcos suaves, fondos limpios y una dirección visual más editorial dentro de la tienda.",
+    title: "Trabajo artesanal",
+    description: "Nada es en serie: cada producto tiene detalles únicos que lo hacen especial.",
   },
   {
     id: 3,
-    title: "Colecciones cercanas",
-    description: "La marca conserva un tono cálido y casero, pero con una interfaz más profesional para vender mejor.",
+    title: "Hecho para tu espacio",
+    description: "Creamos piezas que se adaptan a tu estilo y aportan personalidad a tu entorno.",
   },
 ];
