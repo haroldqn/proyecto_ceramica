@@ -1,23 +1,28 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import AuthModal from "@/features/auth/components/auth-modal";
 import type { AuthUser } from "@/features/auth/types";
 
-const getStoredUser = (): AuthUser | null => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const storedUser = window.localStorage.getItem("user");
-  return storedUser ? (JSON.parse(storedUser) as AuthUser) : null;
-};
-
 export default function Navbar() {
-  const [user, setUser] = useState<AuthUser | null>(getStoredUser);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const syncUserFromStorage = () => {
+      const storedUser = window.localStorage.getItem("user");
+      setUser(storedUser ? (JSON.parse(storedUser) as AuthUser) : null);
+    };
+
+    syncUserFromStorage();
+    window.addEventListener("storage", syncUserFromStorage);
+
+    return () => {
+      window.removeEventListener("storage", syncUserFromStorage);
+    };
+  }, []);
 
   const handleSectionScroll = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -91,7 +96,7 @@ export default function Navbar() {
             {!user ? (
               <button
                 onClick={() => setShowModal(true)}
-                className="cursor-pointer rounded-full bg-[--foreground] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[--accent]"
+                className="button-primary cursor-pointer rounded-full px-5 py-2.5 text-sm font-semibold text-black"
               >
                 Iniciar sesión
               </button>

@@ -62,7 +62,7 @@ export default function AuthModal({ onClose, onLogin }: AuthModalProps) {
               setSuccessMessage("");
             }}
             className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
-              mode === "register" ? "bg-[--accent] text-white" : "text-[--muted]"
+              mode === "register" ? "bg-[--accent] text-bl" : "text-[--muted]"
             }`}
           >
             Crear cuenta

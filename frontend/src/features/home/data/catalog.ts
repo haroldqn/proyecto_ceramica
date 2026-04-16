@@ -1,9 +1,11 @@
-export type Category = {
+﻿export type Category = {
   id: number;
   title: string;
   description: string;
   accent: string;
   countLabel: string;
+  image: string;
+  alt: string;
 };
 
 export type FeaturedProduct = {
@@ -14,6 +16,8 @@ export type FeaturedProduct = {
   etiqueta: string;
   formato: string;
   tonos: [string, string];
+  image: string;
+  alt: string;
 };
 
 export type BrandValue = {
@@ -25,63 +29,77 @@ export type BrandValue = {
 export const categories: Category[] = [
   {
     id: 1,
-    title: "Vasijas esculturales",
-    description: "Piezas de volumen suave para salas, recibidores y repisas protagonistas.",
+    title: "Frutas en cerámica",
+    description: "Piezas pequeñas, brillantes y decorativas para cocinas, mesas auxiliares y rincones con color.",
     accent: "from-[#d8b49a] to-[#a9694f]",
-    countLabel: "18 diseños",
+    countLabel: "Colección frutal",
+    image: "/categorias/frutas.png",
+    alt: "Miniaturas de frutas en cerámica sobre una superficie neutra",
   },
   {
     id: 2,
     title: "Figuras artesanales",
-    description: "Siluetas orgánicas con acabados mate que aportan identidad sin recargar.",
+    description: "Animales y piezas figurativas con presencia cálida para repisas, escritorios y detalles especiales.",
     accent: "from-[#c9b8a7] to-[#8d6b5a]",
-    countLabel: "12 colecciones",
+    countLabel: "Edición decorativa",
+    image: "/categorias/image.png",
+    alt: "Varias figuras de cerámica decorativa alineadas sobre una mesa",
   },
   {
     id: 3,
-    title: "Sobremesa y detalles",
-    description: "Objetos decorativos pequeños para mesas de centro, consolas y rincones cálidos.",
+    title: "Piezas temáticas",
+    description: "Objetos con carácter, ideales para regalos, vitrinas pequeñas y colecciones con personalidad.",
     accent: "from-[#e8d8c8] to-[#bc8b67]",
-    countLabel: "24 piezas",
+    countLabel: "Serie especial",
+    image: "/image3.png",
+    alt: "Búho de cerámica decorativa en primer plano",
   },
 ];
 
 export const featuredProducts: FeaturedProduct[] = [
   {
     id: 1,
-    nombre: "Vasija Aura",
-    precio: 149,
-    descripcion: "Forma cilíndrica estilizada con acabado arena y presencia serena.",
+    nombre: "Set Frutal",
+    precio: 49,
+    descripcion: "Miniaturas de frutas esmaltadas con acabado brillante para decorar cocinas y bandejas.",
     etiqueta: "Nueva colección",
-    formato: "Altura 28 cm",
+    formato: "Set decorativo",
     tonos: ["#d9bfae", "#b77d59"],
+    image: "/categorias/frutas.png",
+    alt: "Colección de frutas de cerámica esmaltada",
   },
   {
     id: 2,
-    nombre: "Figura Nido",
-    precio: 96,
-    descripcion: "Figura curva para repisas y escritorios con textura mineral mate.",
+    nombre: "Figura Guacamayo",
+    precio: 38,
+    descripcion: "Pieza pequeña de ave colorida hecha a mano para repisas, escritorios o regalos.",
     etiqueta: "Más vendido",
-    formato: "Edición limitada",
+    formato: "Figura artesanal",
     tonos: ["#cab2a1", "#8d6958"],
+    image: "/categorias/loro.png",
+    alt: "Figura de guacamayo de cerámica pintada a mano",
   },
   {
     id: 3,
-    nombre: "Centro Calma",
-    precio: 124,
-    descripcion: "Pieza horizontal pensada para mesas de comedor o consolas minimalistas.",
+    nombre: "Búho Decorativo",
+    precio: 56,
+    descripcion: "Figura protagonista con lectura ornamental, ideal para vitrinas y mesas auxiliares.",
     etiqueta: "Hecho a mano",
-    formato: "Ancho 34 cm",
+    formato: "Pieza especial",
     tonos: ["#eadbcc", "#c08963"],
+    image: "/categorias/buho.png",
+    alt: "Búho de cerámica decorativa de tonos crema y verde",
   },
   {
     id: 4,
-    nombre: "Totem Brisa",
-    precio: 172,
-    descripcion: "Composición vertical de líneas limpias para rincones con luz natural.",
+    nombre: "Figura Canina",
+    precio: 44,
+    descripcion: "Figura simpática de inspiración artesanal para espacios cálidos y colecciones decorativas.",
     etiqueta: "Curaduría especial",
     formato: "Serie atelier",
     tonos: ["#dbc8bc", "#9d725d"],
+    image: "/categorias/perro.png",
+    alt: "Figura de perro de cerámica pintada a mano",
   },
 ];
 
@@ -89,16 +107,16 @@ export const brandValues: BrandValue[] = [
   {
     id: 1,
     title: "Diseño honesto",
-    description: "Cada silueta nace para convivir con espacios sobrios, luz cálida y materiales nobles.",
+    description: "Cada pieza se muestra con protagonismo real, con fotografías que resaltan color, brillo y textura artesanal.",
   },
   {
     id: 2,
-    title: "Acabado artesanal",
-    description: "Trabajamos texturas mate, bordes suaves y esmaltes neutros que resisten tendencias pasajeras.",
+    title: "Presentación cuidada",
+    description: "Elevamos tus fotos con marcos suaves, fondos limpios y una dirección visual más editorial dentro de la tienda.",
   },
   {
     id: 3,
-    title: "Colecciones pequeñas",
-    description: "Producimos por series cortas para cuidar el detalle y mantener piezas con carácter propio.",
+    title: "Colecciones cercanas",
+    description: "La marca conserva un tono cálido y casero, pero con una interfaz más profesional para vender mejor.",
   },
 ];
