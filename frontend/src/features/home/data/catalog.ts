@@ -42,7 +42,7 @@ export const categories: Category[] = [
     description: "Animales y piezas figurativas con presencia cálida para repisas, escritorios y detalles especiales.",
     accent: "from-[#c9b8a7] to-[#8d6b5a]",
     countLabel: "Edición decorativa",
-    image: "/categorias/image.png",
+    image: "/categorias/jarrones.png",
     alt: "Varias figuras de cerámica decorativa alineadas sobre una mesa",
   },
   {
@@ -51,7 +51,7 @@ export const categories: Category[] = [
     description: "Objetos con carácter, ideales para regalos, vitrinas pequeñas y colecciones con personalidad.",
     accent: "from-[#e8d8c8] to-[#bc8b67]",
     countLabel: "Serie especial",
-    image: "/image3.png",
+    image: "/categorias/brujas.png",
     alt: "Búho de cerámica decorativa en primer plano",
   },
 ];
@@ -65,7 +65,7 @@ export const featuredProducts: FeaturedProduct[] = [
     etiqueta: "Nueva colección",
     formato: "Set decorativo",
     tonos: ["#d9bfae", "#b77d59"],
-    image: "/categorias/frutas.png",
+    image: "/categorias/set_frutal.png",
     alt: "Colección de frutas de cerámica esmaltada",
   },
   {

@@ -17,6 +17,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
           alt={category.alt}
           width={1200}
           height={900}
+          loading="eager"
           className="h-60 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
         />
       </div>
