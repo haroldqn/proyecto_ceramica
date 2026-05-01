@@ -26,7 +26,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+
+//        Verificar correo
+        if (!request.validateEmail(request.email())) {
+            return ResponseEntity.badRequest().body("Porfavir ingrwese un correo valido");
+        }
+
         authService.register(request);
         return ResponseEntity.ok("User registered successfully");
     }
