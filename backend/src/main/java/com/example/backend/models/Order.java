@@ -29,7 +29,7 @@ public class Order {
     @Column(nullable = false)
     private Double total;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client")
     private Persona persona;
 }
