@@ -1,10 +1,12 @@
-"use client";
+﻿"use client";
+
 import { useState } from "react";
+import type { AuthUser } from "@/features/auth/types";
 
 export function useAuth() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
 
-  const login = (userData: any) => {
+  const login = (userData: AuthUser) => {
     setUser(userData);
   };
 

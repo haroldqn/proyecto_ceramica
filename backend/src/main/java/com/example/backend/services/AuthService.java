@@ -42,7 +42,12 @@ public class AuthService {
 
     public void register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+            throw new RuntimeException("El email ya existe");
+        }
+
+        if (isBlank(request.dni()) || isBlank(request.firstName()) || isBlank(request.lastName())
+                || isBlank(request.motherLastName())) {
+            throw new RuntimeException("Debes consultar y completar los datos del DNI antes de registrarte");
         }
 
         Role role = roleRepository.findByName("CLIENTE")
@@ -54,10 +59,27 @@ public class AuthService {
         user.setRole(role);
 
         Persona persona = new Persona();
-        persona.setName(request.name());
+        persona.setDni(request.dni());
+        persona.setFirstName(request.firstName());
+        persona.setLastName(request.lastName());
+        persona.setMotherLastName(request.motherLastName());
+        persona.setBirthDate(request.birthDate());
+        persona.setName(buildFullName(request));
         persona = personaRepository.save(persona);
 
         user.setPersona(persona);
         userRepository.save(user);
+    }
+
+    private String buildFullName(RegisterRequest request) {
+        return String.join(" ",
+                request.firstName().trim(),
+                request.lastName().trim(),
+                request.motherLastName().trim()
+        ).trim();
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 }

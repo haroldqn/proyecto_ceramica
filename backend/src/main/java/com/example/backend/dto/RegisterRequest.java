@@ -1,4 +1,12 @@
 package com.example.backend.dto;
 
-public record RegisterRequest(String name, String email, String password) {
+public record RegisterRequest(
+        String dni,
+        String firstName,
+        String lastName,
+        String motherLastName,
+        String birthDate,
+        String email,
+        String password
+) {
 }
