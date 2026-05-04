@@ -32,7 +32,6 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(nullable = false)
     private boolean status = true; // toods inician en true, si c acaba pasa false
 
     @ManyToOne(fetch = FetchType.LAZY)

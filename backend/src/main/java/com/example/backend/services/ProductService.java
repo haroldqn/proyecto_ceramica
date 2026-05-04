@@ -1,12 +1,16 @@
 package com.example.backend.services;
 
 import com.example.backend.dto.ProductDetailResponse;
+import com.example.backend.dto.RelatedProductDTO;
 import com.example.backend.models.Product;
 import com.example.backend.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -17,7 +21,13 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Este producto no Existe"));
 
-        boolean status = product.getStock() > 0;
+        boolean status = product.getStock() >= 0; // faltaba el "=" :v
+
+        List<RelatedProductDTO> relatedProductDTO = productRepository
+                .recommendByCategory(product.getCategory().getId(), product.getId())
+                .stream()
+                .map(RelatedProductDTO::new)
+                .collect(Collectors.toList());
 
         return new ProductDetailResponse(
                 product.getId(),
@@ -29,7 +39,9 @@ public class ProductService {
                 product.getCategory().getName(),
                 product.getSize().getName(),
                 product.getSize().getDimension(),
-                product.getCategory().getDescription()
+                product.getCategory().getDescription(),
+
+                relatedProductDTO
         );
     }
 }
