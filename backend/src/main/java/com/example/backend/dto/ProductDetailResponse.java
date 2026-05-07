@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +22,6 @@ public class ProductDetailResponse {
     private String sizeDimension; // abc x dbc
     private String description; // viene de la categoria
 
+    // recomendados
+    private List<RelatedProductDTO> relatedProducts;
 }
