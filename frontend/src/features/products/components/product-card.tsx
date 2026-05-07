@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Image from "next/image";
+import toast from "react-hot-toast";
 import type { AuthUser } from "@/features/auth/types";
 
 type Props = {
@@ -19,14 +20,17 @@ type Props = {
   onRequireAuth: () => void;
 };
 
-export default function ProductCard({ producto, user, onRequireAuth }: Props) {
+export default function ProductCard(props: Props) {
+  const { producto, user } = props;
+
   const handleComprar = () => {
     if (!user) {
-      onRequireAuth();
+      toast.success("Producto seleccionado. Puedes comprar sin iniciar sesión.");
       return;
     }
 
     console.log("comprar producto:", producto.id);
+    toast.success("Producto agregado correctamente.");
   };
 
   return (

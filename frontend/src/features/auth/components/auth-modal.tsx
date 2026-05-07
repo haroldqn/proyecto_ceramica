@@ -1,23 +1,13 @@
 ﻿"use client";
 
-import { useState } from "react";
 import LoginForm from "./login-form";
-import RegisterForm from "./register-form";
 import type { AuthModalProps, AuthUser } from "@/features/auth/types";
 
 export default function AuthModal({ onClose, onLogin }: AuthModalProps) {
-  const [mode, setMode] = useState<"login" | "register">("login");
-  const [successMessage, setSuccessMessage] = useState("");
-
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
-  };
-
-  const handleRegisterSuccess = () => {
-    setSuccessMessage("Cuenta creada. Puedes iniciar sesión ahora.");
-    setMode("login");
   };
 
   const handleLoginSuccess = (user: AuthUser) => {
@@ -36,46 +26,14 @@ export default function AuthModal({ onClose, onLogin }: AuthModalProps) {
             El mundo de Mery
           </p>
           <h2 className="font-display text-4xl leading-none text-[--foreground]">
-            Accede a tu cuenta
+            Accede con Google
           </h2>
           <p className="text-sm leading-6 text-[--muted]">
-            Ingresa para guardar tus favoritos y continuar con tu compra.
+            Inicia sesión con tu cuenta de Google para continuar tu compra y guardar tus favoritos.
           </p>
         </div>
 
-        <div className="mb-5 flex rounded-full bg-[#f1e6dd] p-1">
-          <button
-            onClick={() => {
-              setMode("login");
-              setSuccessMessage("");
-            }}
-            className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
-              mode === "login" ? "bg-[--accent] text-black" : "text-[--muted]"
-            }`}
-          >
-            Iniciar sesión
-          </button>
-
-          <button
-            onClick={() => {
-              setMode("register");
-              setSuccessMessage("");
-            }}
-            className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
-              mode === "register" ? "bg-[--accent] text-black" : "text-[--muted]"
-            }`}
-          >
-            Crear cuenta
-          </button>
-        </div>
-
-        {/* {successMessage && <p className="mb-3 text-sm text-green-700">{successMessage}</p>} */}
-
-        {mode === "login" ? (
-          <LoginForm onLogin={handleLoginSuccess} />
-        ) : (
-          <RegisterForm onRegister={handleRegisterSuccess} />
-        )}
+        <LoginForm onLogin={handleLoginSuccess} />
 
         <button
           onClick={onClose}

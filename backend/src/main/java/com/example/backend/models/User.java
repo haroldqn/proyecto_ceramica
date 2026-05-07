@@ -1,4 +1,4 @@
-package com.example.backend.models;
+﻿package com.example.backend.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,8 +18,15 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "google_id", unique = true)
+    private String googleId;
+
+    @Column(name = "auth_provider")
+    private String authProvider;
 
     @ManyToOne
     @JoinColumn(name = "id_role")

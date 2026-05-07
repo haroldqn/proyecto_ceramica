@@ -1,5 +1,6 @@
-package com.example.backend.controllers;
+﻿package com.example.backend.controllers;
 
+import com.example.backend.dto.GoogleLoginRequest;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.LoginResponse;
 import com.example.backend.dto.RegisterRequest;
@@ -23,6 +24,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<LoginResponse> loginWithGoogle(@RequestBody GoogleLoginRequest request) {
+        return ResponseEntity.ok(authService.loginWithGoogle(request));
     }
 
     @PostMapping("/register")

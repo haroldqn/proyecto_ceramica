@@ -1,6 +1,7 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Script from "next/script";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -8,66 +9,93 @@ type Props = {
 };
 
 export default function LoginForm({ onLogin }: Props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const buttonRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(errorData || "Credenciales inválidas");
-      }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      toast.success(`¡Bienvenido ${data.name}!`);
-      onLogin({ name: data.name, role: data.role });
-    } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : "Error en el login";
-      toast.error(errorMsg);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (window.google) {
+      setScriptLoaded(true);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!scriptLoaded || !clientId || !buttonRef.current || !window.google) {
+      return;
+    }
+
+    buttonRef.current.innerHTML = "";
+
+    window.google.accounts.id.initialize({
+      client_id: clientId,
+      callback: async ({ credential }) => {
+        setLoading(true);
+
+        try {
+          const response = await fetch("http://localhost:8080/api/auth/google", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ credential }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(errorData || "No se pudo iniciar sesión con Google");
+          }
+
+          const data = await response.json();
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify({ name: data.name, role: data.role }));
+          toast.success(`¡Bienvenido ${data.name}!`);
+          onLogin({ name: data.name, role: data.role });
+        } catch (err: unknown) {
+          const errorMsg = err instanceof Error ? err.message : "Error al iniciar con Google";
+          toast.error(errorMsg);
+        } finally {
+          setLoading(false);
+        }
+      },
+      auto_select: false,
+      cancel_on_tap_outside: true,
+    });
+
+    window.google.accounts.id.renderButton(buttonRef.current, {
+      theme: "outline",
+      size: "large",
+      shape: "pill",
+      text: "continue_with",
+      width: 320,
+      logo_alignment: "left",
+    });
+  }, [clientId, onLogin, scriptLoaded]);
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <input
-        type="email"
-        placeholder="Correo"
-        autoComplete="off"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        autoComplete="off"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
-        required
+    <>
+      <Script
+        src="https://accounts.google.com/gsi/client"
+        strategy="afterInteractive"
+        onLoad={() => setScriptLoaded(true)}
+        onReady={() => setScriptLoaded(true)}
       />
 
-      <button
-        type="submit"
-        className="mt-2 cursor-pointer rounded-full bg-[--foreground] p-3 font-semibold text-black transition hover:bg-[--accent]"
-        disabled={loading}
-      >
-        {loading ? "Cargando..." : "Iniciar sesión"}
-      </button>
-    </form>
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] p-4 text-sm leading-6 text-[--muted]">
+          Usa tu cuenta de Google para entrar. Si es tu primera vez, crearemos tu acceso automáticamente.
+        </div>
+
+        {!clientId ? (
+          <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            Falta configurar NEXT_PUBLIC_GOOGLE_CLIENT_ID en el frontend.
+          </p>
+        ) : (
+          <div className="flex flex-col items-center gap-3">
+            <div ref={buttonRef} className="flex justify-center" />
+            {loading && <p className="text-sm text-[--muted]">Validando cuenta de Google...</p>}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
