@@ -19,7 +19,6 @@ export default function RegisterForm({ onRegister }: Props) {
   const [loading, setLoading] = useState(false);
   const [loadingDni, setLoadingDni] = useState(false);
 
-  const isValidEmail = (value: string) => value.endsWith("@gmail.com");
   const isValidDni = (value: string) => /^\d{8}$/.test(value);
 
   const resetPersonData = () => {
@@ -68,30 +67,6 @@ export default function RegisterForm({ onRegister }: Props) {
     e.preventDefault();
     setLoading(true);
     setError("");
-
-    if (!isValidDni(dni)) {
-      const message = "Debes ingresar un DNI válido de 8 dígitos";
-      setError(message);
-      setLoading(false);
-      toast.error(message);
-      return;
-    }
-
-    if (!firstName || !lastName || !motherLastName) {
-      const message = "Primero consulta el DNI para completar los datos personales";
-      setError(message);
-      setLoading(false);
-      toast.error(message);
-      return;
-    }
-
-    if (!isValidEmail(email)) {
-      const message = "El correo debe ser de Gmail (@gmail.com)";
-      setError(message);
-      setLoading(false);
-      toast.error(message);
-      return;
-    }
 
     try {
       const response = await fetch("http://localhost:8080/api/auth/register", {
@@ -173,7 +148,7 @@ export default function RegisterForm({ onRegister }: Props) {
       />
       <input
         type="email"
-        placeholder="Correo (solo Gmail)"
+        placeholder="Correo electrónico"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
