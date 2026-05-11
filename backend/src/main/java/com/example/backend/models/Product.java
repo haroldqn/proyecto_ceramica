@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -21,22 +24,26 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String description;
-
-    @Column(nullable = false)
-    private String dimension; // En cm?
-
     @Column(nullable = false, name = "image_url")
     private String imageUrl;
 
-    @Column(nullable = false)
-    private Double price;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
     @Column(nullable = false)
     private Integer stock;
 
-    @ManyToOne
+    private boolean status = true; // toods inician en true, si c acaba pasa false
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_category")
     private Category category;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_sizes", // nombre de la tabla intermedia en la bd
+            joinColumns = @JoinColumn(name = "id_product"),
+            inverseJoinColumns = @JoinColumn(name = "id_size")
+    )
+    private List<Size> sizes;
 }

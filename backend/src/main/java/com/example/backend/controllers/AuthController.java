@@ -6,11 +6,7 @@ import com.example.backend.dto.RegisterRequest;
 import com.example.backend.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,7 +22,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+
+//        Verificar correo
+        if (!request.validateEmail(request.email())) {
+            return ResponseEntity.badRequest().body("Porfavir ingrwese un correo valido");
+        }
+
         authService.register(request);
         return ResponseEntity.ok("User registered successfully");
     }
