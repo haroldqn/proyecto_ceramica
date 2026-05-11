@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.ProductDetailResponse;
 import com.example.backend.dto.RelatedProductDTO;
+import com.example.backend.dto.SizeDTO;
 import com.example.backend.models.Product;
 import com.example.backend.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,16 @@ public class ProductService {
                 .map(RelatedProductDTO::new)
                 .collect(Collectors.toList());
 
+        // coleccion de talla
+        List<SizeDTO> sizesDTO = product.getSizes().
+                stream()
+                .map(size -> new SizeDTO(
+                        size.getId(),
+                        size.getName(),
+                        size.getDimension()
+                ))
+                .collect(Collectors.toList());
+
         return new ProductDetailResponse(
                 product.getId(),
                 product.getName(),
@@ -37,10 +48,8 @@ public class ProductService {
                 product.getImageUrl(),
                 status,
                 product.getCategory().getName(),
-                product.getSize().getName(),
-                product.getSize().getDimension(),
                 product.getCategory().getDescription(),
-
+                sizesDTO,
                 relatedProductDTO
         );
     }

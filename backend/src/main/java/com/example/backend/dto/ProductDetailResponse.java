@@ -18,9 +18,9 @@ public class ProductDetailResponse {
     private String imageUrl;
     private boolean status;
     private String categoryName;
-    private String sizeName;
-    private String sizeDimension; // abc x dbc
     private String description; // viene de la categoria
+
+    private List<SizeDTO> sizes;
 
     // recomendados
     private List<RelatedProductDTO> relatedProducts;
