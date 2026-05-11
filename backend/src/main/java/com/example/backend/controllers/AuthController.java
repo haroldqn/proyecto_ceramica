@@ -6,8 +6,11 @@ import com.example.backend.dto.LoginResponse;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.services.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,8 +26,13 @@ public class AuthController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<LoginResponse> loginWithGoogle(@RequestBody GoogleLoginRequest request) {
-        return ResponseEntity.ok(authService.loginWithGoogle(request));
+    public ResponseEntity<?> loginWithGoogle(@RequestBody GoogleLoginRequest request) {
+        try {
+            return ResponseEntity.ok(authService.loginWithGoogle(request));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", ex.getMessage()));
+        }
     }
 
     @PostMapping("/register")
