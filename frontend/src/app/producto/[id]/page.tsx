@@ -1,3 +1,4 @@
+import Navbar from "@/components/shared/navbar-public";
 import ProductDisplay from "@/features/products/components/ProductDisplay";
 
 interface PageProps {
@@ -8,5 +9,10 @@ interface PageProps {
 
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
-  return <ProductDisplay productId={parseInt(id)} />;
+  return (
+    <>
+      <Navbar />
+      <ProductDisplay productId={parseInt(id)} />
+    </>
+  );
 }

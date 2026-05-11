@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import FooterPublic from "@/components/shared/footer-public";
+import { useCart } from "@/features/cart/cart-context";
 import { getProductById } from "@/features/products/services/product-service";
 import type { ProductDetail } from "@/types/product";
 
@@ -12,6 +14,7 @@ interface ProductDisplayProps {
 }
 
 export default function ProductDisplay({ productId }: ProductDisplayProps) {
+  const { addItem } = useCart();
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,6 +28,7 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
       try {
         setLoading(true);
         setError(null);
+        setProduct(null);
         const data = await getProductById(productId);
 
         if (!ignore) {
@@ -50,11 +54,27 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
     };
   }, [productId]);
 
-  if (loading) {
+  const isChangingProduct = product !== null && product.id !== productId;
+
+  if (loading || isChangingProduct) {
     return (
-      <div className="mx-auto max-w-7xl px-5 py-12">
-        <div className="rounded-[2rem] border border-[--border-soft] bg-[--surface] p-8 text-center text-[--muted]">
-          Cargando producto...
+      <div className="mx-auto max-w-7xl px-5 py-10 md:px-8 lg:py-14">
+        <div className="rounded-[2rem] border border-[--border-soft] bg-[--surface] p-4 shadow-[0_24px_70px_rgba(77,50,36,0.1)] md:p-6">
+          <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr]">
+            <div className="image-card overflow-hidden rounded-[1.6rem]">
+              <div className="aspect-square w-full animate-pulse bg-white/35" />
+            </div>
+            <div className="rounded-[1.6rem] border border-[--border-soft] bg-white/72 p-5 md:p-7">
+              <div className="h-5 w-36 animate-pulse rounded-full bg-[--surface-strong]" />
+              <div className="mt-6 h-14 w-4/5 animate-pulse rounded-2xl bg-[--surface-strong]" />
+              <div className="mt-4 h-9 w-32 animate-pulse rounded-2xl bg-[--surface-strong]" />
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                <div className="h-20 animate-pulse rounded-2xl bg-[--surface-strong]" />
+                <div className="h-20 animate-pulse rounded-2xl bg-[--surface-strong]" />
+              </div>
+              <div className="mt-8 h-14 animate-pulse rounded-full bg-[--surface-strong]" />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -75,6 +95,24 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
   const selectedSize =
     product.sizes.find((size) => size.id === selectedSizeId) ?? product.sizes[0];
   const formattedPrice = `S/${Number(product.price).toFixed(2)}`;
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      toast.error("Selecciona un tamaño");
+      return;
+    }
+
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: Number(product.price),
+      imageUrl: product.imageUrl,
+      sizeId: selectedSize.id,
+      sizeName: selectedSize.name,
+      sizeDimension: selectedSize.dimension,
+      quantity: cantidad,
+    });
+    toast.success("Producto agregado al carrito");
+  };
 
   return (
     <>
@@ -200,10 +238,11 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
 
                 <button
                   type="button"
-                  disabled={product.stock === 0}
+                  onClick={handleAddToCart}
+                  disabled={product.stock === 0 || !selectedSize}
                   className="button-primary inline-flex w-full cursor-pointer items-center justify-center rounded-full bg-[#e3b792] px-6 py-4 text-sm font-semibold text-black transition hover:bg-[#d9a77d] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {product.stock === 0 ? "Agotado" : "Comprar ahora"}
+                  {product.stock === 0 ? "Agotado" : "Agregar al carrito"}
                 </button>
               </div>
             </aside>

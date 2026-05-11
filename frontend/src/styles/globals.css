@@ -82,6 +82,25 @@ button {
   pointer-events: none;
 }
 
+.cart-bump {
+  animation: cart-bump 520ms ease;
+}
+
+@keyframes cart-bump {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  30% {
+    transform: translateY(-3px) rotate(-8deg) scale(1.08);
+  }
+  60% {
+    transform: translateY(1px) rotate(6deg) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
 @media (max-width: 768px) {
   .image-card img {
     min-height: 220px;
