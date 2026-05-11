@@ -101,6 +101,7 @@ export default function Home() {
               eyebrow="Destacados"
               title="Productos con lenguaje limpio y carácter artesanal."
               description="Descubre piezas únicas de cerámica, creadas para decorar y dar vida a tus espacios."
+              fullWidth
             />
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">

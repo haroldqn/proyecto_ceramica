@@ -21,7 +21,7 @@ type Props = {
 };
 
 export default function ProductCard(props: Props) {
-  const { producto, user } = props;
+  const { producto } = props;
   const router = useRouter();
 
   const handleComprar = () => {

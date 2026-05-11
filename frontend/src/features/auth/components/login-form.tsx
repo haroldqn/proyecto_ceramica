@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import toast from "react-hot-toast";
+import { loginWithGoogle } from "@/features/auth/services/auth-service";
 
 type Props = {
   onLogin: (user: { name: string; role: string }) => void;
@@ -35,29 +36,7 @@ export default function LoginForm({ onLogin }: Props) {
           setLoading(true);
 
           try {
-            const response = await fetch("http://localhost:8080/api/auth/google", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ credential }),
-            });
-
-            if (!response.ok) {
-              const rawError = await response.text();
-              let errorMessage = "No se pudo iniciar sesión con Google";
-
-              try {
-                const parsedError = JSON.parse(rawError) as { error?: string };
-                errorMessage = parsedError.error || errorMessage;
-              } catch {
-                if (rawError) {
-                  errorMessage = rawError;
-                }
-              }
-
-              throw new Error(errorMessage);
-            }
-
-            const data = await response.json();
+            const data = await loginWithGoogle(credential);
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify({ name: data.name, role: data.role }));
             toast.success(`¡Bienvenido ${data.name}!`);

@@ -6,10 +6,15 @@ export interface ProductDetail {
     imageUrl: string;
     status: boolean;
     categoryName: string;
-    sizeName: string;
-    sizeDimension: string;
     description: string;
+    sizes: ProductSize[];
     relatedProducts: RelatedProduct[];
+}
+
+export interface ProductSize {
+    id: number;
+    name: string;
+    dimension: string;
 }
 
 export interface RelatedProduct {
