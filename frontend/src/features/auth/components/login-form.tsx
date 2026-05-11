@@ -28,38 +28,53 @@ export default function LoginForm({ onLogin }: Props) {
 
     buttonRef.current.innerHTML = "";
 
-    window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: async ({ credential }) => {
-        setLoading(true);
+    if (!window.__googleIdentityInitialized) {
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: async ({ credential }) => {
+          setLoading(true);
 
-        try {
-          const response = await fetch("http://localhost:8080/api/auth/google", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ credential }),
-          });
+          try {
+            const response = await fetch("http://localhost:8080/api/auth/google", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ credential }),
+            });
 
-          if (!response.ok) {
-            const errorData = await response.text();
-            throw new Error(errorData || "No se pudo iniciar sesión con Google");
+            if (!response.ok) {
+              const rawError = await response.text();
+              let errorMessage = "No se pudo iniciar sesión con Google";
+
+              try {
+                const parsedError = JSON.parse(rawError) as { error?: string };
+                errorMessage = parsedError.error || errorMessage;
+              } catch {
+                if (rawError) {
+                  errorMessage = rawError;
+                }
+              }
+
+              throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify({ name: data.name, role: data.role }));
+            toast.success(`¡Bienvenido ${data.name}!`);
+            onLogin({ name: data.name, role: data.role });
+          } catch (err: unknown) {
+            const errorMsg = err instanceof Error ? err.message : "Error al iniciar con Google";
+            toast.error(errorMsg);
+          } finally {
+            setLoading(false);
           }
+        },
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
 
-          const data = await response.json();
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify({ name: data.name, role: data.role }));
-          toast.success(`¡Bienvenido ${data.name}!`);
-          onLogin({ name: data.name, role: data.role });
-        } catch (err: unknown) {
-          const errorMsg = err instanceof Error ? err.message : "Error al iniciar con Google";
-          toast.error(errorMsg);
-        } finally {
-          setLoading(false);
-        }
-      },
-      auto_select: false,
-      cancel_on_tap_outside: true,
-    });
+      window.__googleIdentityInitialized = true;
+    }
 
     window.google.accounts.id.renderButton(buttonRef.current, {
       theme: "outline",

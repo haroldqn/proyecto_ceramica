@@ -1,5 +1,6 @@
 ﻿declare global {
   interface Window {
+    __googleIdentityInitialized?: boolean;
     google?: {
       accounts: {
         id: {

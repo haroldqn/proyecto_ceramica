@@ -50,6 +50,7 @@ export default function ProductCard(props: Props) {
           alt={producto.alt}
           width={1200}
           height={1000}
+          loading="eager"
           className="h-72 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
         />
       </div>
