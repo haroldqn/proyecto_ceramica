@@ -11,32 +11,16 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "products")
-public class Product {
+@Table(name = "size")
+public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_product")
+    @Column(name = "id_size")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(nullable = false)
-    private Double price;
-
-    private Boolean status;
-
-    @Column(nullable = false)
-    private Integer stock;
-
-    @ManyToOne
-    @JoinColumn(name = "id_category")
-    private Category category;
-
-    @ManyToOne
-    @JoinColumn(name = "id_size")
-    private Size size;
+    private String dimension;
 }
