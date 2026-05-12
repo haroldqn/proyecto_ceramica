@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.dto.CategoryDTO;
 import com.example.backend.dto.CategoryShowcaseDTO;
 import com.example.backend.dto.ProductSummaryDTO;
 import com.example.backend.models.Category;
@@ -37,10 +38,23 @@ public class CategoryService {
 
             return new CategoryShowcaseDTO(
                     category.getId(),
+                    category.getLabel(),
                     category.getName(),
                     category.getDescription(),
+                    category.getImageUrl(),
                     topProducts
             );
         }).collect(Collectors.toList());
+    }
+
+    public List<CategoryDTO> getHomeCategories() {
+
+        return categoryRepository.findByEventStatusTrue().stream().map(category -> new CategoryDTO(
+                category.getId(),
+                category.getLabel(),
+                category.getName(),
+                category.getDescription(),
+                category.getImageUrl()
+        )).toList();
     }
 }
