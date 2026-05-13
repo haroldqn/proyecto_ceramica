@@ -26,7 +26,7 @@ public class AuthController {
 
 //        Verificar correo
         if (!request.validateEmail(request.email())) {
-            return ResponseEntity.badRequest().body("Porfavir ingrwese un correo valido");
+            return ResponseEntity.badRequest().body("Porfavor ingrese un correo valido");
         }
 
         authService.register(request);
