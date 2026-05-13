@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { registerUser } from "@/features/auth/services/auth-service";
+import { findPersonByDni } from "@/features/auth/services/persona-service";
 
 type Props = {
   onRegister: () => void;
@@ -41,13 +43,7 @@ export default function RegisterForm({ onRegister }: Props) {
     setError("");
 
     try {
-      const response = await fetch(`http://localhost:8080/api/personas/dni/${dni}`);
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || "No se pudieron obtener los datos del DNI");
-      }
-
-      const data = await response.json();
+      const data = await findPersonByDni(dni);
       setFirstName(data.firstName ?? data.nombres ?? "");
       setLastName(data.lastName ?? data.apellidoPaterno ?? "");
       setMotherLastName(data.motherLastName ?? data.apellidoMaterno ?? "");
@@ -69,24 +65,15 @@ export default function RegisterForm({ onRegister }: Props) {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          dni,
-          firstName,
-          lastName,
-          motherLastName,
-          birthDate,
-          email,
-          password,
-        }),
+      await registerUser({
+        dni,
+        firstName,
+        lastName,
+        motherLastName,
+        birthDate,
+        email,
+        password,
       });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(errorData || "Error al registrar");
-      }
 
       toast.success("¡Cuenta creada correctamente!");
       onRegister();

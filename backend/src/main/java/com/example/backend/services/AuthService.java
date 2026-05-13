@@ -1,5 +1,7 @@
 package com.example.backend.services;
 
+import com.example.backend.dto.GoogleLoginRequest;
+import com.example.backend.dto.GoogleTokenInfoResponse;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.LoginResponse;
 import com.example.backend.dto.RegisterRequest;
@@ -27,6 +29,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final GoogleAuthService googleAuthService;
 
     public LoginResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
@@ -40,6 +43,24 @@ public class AuthService {
         return new LoginResponse(token, user.getPersona().getName(), user.getRole().getName());
     }
 
+    public LoginResponse loginWithGoogle(GoogleLoginRequest request) {
+        GoogleTokenInfoResponse tokenInfo = googleAuthService.verifyCredential(request.credential());
+
+        User user = userRepository.findByGoogleId(tokenInfo.subject())
+                .orElseGet(() -> userRepository.findByEmail(tokenInfo.email())
+                        .map(existingUser -> attachGoogleIdentity(existingUser, tokenInfo))
+                        .orElseGet(() -> createGoogleUser(tokenInfo)));
+
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .roles(user.getRole().getName())
+                .build();
+
+        String token = jwtService.generateToken(userDetails);
+        return new LoginResponse(token, user.getPersona().getName(), user.getRole().getName());
+    }
+
     public void register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new RuntimeException("El email ya existe");
@@ -50,12 +71,18 @@ public class AuthService {
             throw new RuntimeException("Debes consultar y completar los datos del DNI antes de registrarte");
         }
 
+        // Validar que el DNI no esté registrado
+        if (personaRepository.findByDni(request.dni()).isPresent()) {
+            throw new RuntimeException("Esta persona ya tiene una cuenta registrada");
+        }
+
         Role role = roleRepository.findByName("CLIENTE")
                 .orElseThrow(() -> new RuntimeException("Role CLIENTE not found"));
 
         User user = new User();
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setAuthProvider("LOCAL");
         user.setRole(role);
 
         Persona persona = new Persona();
@@ -71,6 +98,35 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    private User attachGoogleIdentity(User user, GoogleTokenInfoResponse tokenInfo) {
+        user.setGoogleId(tokenInfo.subject());
+        user.setAuthProvider("GOOGLE");
+        return userRepository.save(user);
+    }
+
+    private User createGoogleUser(GoogleTokenInfoResponse tokenInfo) {
+        Role role = roleRepository.findByName("CLIENTE")
+                .orElseThrow(() -> new RuntimeException("Role CLIENTE not found"));
+
+        Persona persona = new Persona();
+        persona.setName(resolveDisplayName(tokenInfo));
+        persona.setFirstName(resolveFirstName(tokenInfo));
+        persona.setLastName(resolveLastName(tokenInfo));
+        persona.setMotherLastName("");
+        persona.setBirthDate(null);
+        persona = personaRepository.save(persona);
+
+        User user = new User();
+        user.setEmail(tokenInfo.email());
+        user.setPassword(passwordEncoder.encode("GOOGLE-" + tokenInfo.subject()));
+        user.setGoogleId(tokenInfo.subject());
+        user.setAuthProvider("GOOGLE");
+        user.setRole(role);
+        user.setPersona(persona);
+
+        return userRepository.save(user);
+    }
+
     private String buildFullName(RegisterRequest request) {
         return String.join(" ",
                 request.firstName().trim(),
@@ -81,5 +137,26 @@ public class AuthService {
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
+    }
+
+    private String resolveDisplayName(GoogleTokenInfoResponse tokenInfo) {
+        if (!isBlank(tokenInfo.name())) {
+            return tokenInfo.name().trim();
+        }
+        return String.join(" ", resolveFirstName(tokenInfo), resolveLastName(tokenInfo)).trim();
+    }
+
+    private String resolveFirstName(GoogleTokenInfoResponse tokenInfo) {
+        if (!isBlank(tokenInfo.givenName())) {
+            return tokenInfo.givenName().trim();
+        }
+        return !isBlank(tokenInfo.name()) ? tokenInfo.name().trim() : "Usuario";
+    }
+
+    private String resolveLastName(GoogleTokenInfoResponse tokenInfo) {
+        if (!isBlank(tokenInfo.familyName())) {
+            return tokenInfo.familyName().trim();
+        }
+        return "";
     }
 }

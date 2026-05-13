@@ -2,6 +2,7 @@
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "@/styles/globals.css";
 import ToasterProvider from "@/components/providers/toaster-provider";
+import { CartProvider } from "@/features/cart/cart-context";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -26,12 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
+    <html lang="es" data-scroll-behavior="smooth">
       <body
         className={`${displayFont.variable} ${bodyFont.variable} bg-[--background] text-[--foreground] antialiased`}
       >
-        <ToasterProvider />
-        {children}
+        <CartProvider>
+          <ToasterProvider />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { AuthUser } from "@/features/auth/types";
 
 type Props = {
@@ -19,14 +20,13 @@ type Props = {
   onRequireAuth: () => void;
 };
 
-export default function ProductCard({ producto, user, onRequireAuth }: Props) {
-  const handleComprar = () => {
-    if (!user) {
-      onRequireAuth();
-      return;
-    }
+export default function ProductCard(props: Props) {
+  const { producto } = props;
+  const router = useRouter();
 
-    console.log("comprar producto:", producto.id);
+  const handleComprar = () => {
+    console.log("ID del producto:", producto.id);
+    router.push(`/producto/${producto.id}`);
   };
 
   return (
@@ -46,6 +46,7 @@ export default function ProductCard({ producto, user, onRequireAuth }: Props) {
           alt={producto.alt}
           width={1200}
           height={1000}
+          loading="eager"
           className="h-72 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
         />
       </div>
