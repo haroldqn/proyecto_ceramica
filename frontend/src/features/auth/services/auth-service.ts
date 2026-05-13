@@ -11,7 +11,12 @@ export type RegisterPayload = {
   password: string;
 };
 
-export type GoogleLoginResponse = AuthUser & {
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export type AuthLoginResponse = AuthUser & {
   token: string;
 };
 
@@ -22,8 +27,15 @@ export function registerUser(payload: RegisterPayload) {
   });
 }
 
+export function loginWithEmail(payload: LoginPayload) {
+  return apiRequest<AuthLoginResponse>("/api/auth/login", {
+    method: "POST",
+    body: payload,
+  });
+}
+
 export function loginWithGoogle(credential: string) {
-  return apiRequest<GoogleLoginResponse>("/api/auth/google", {
+  return apiRequest<AuthLoginResponse>("/api/auth/google", {
     method: "POST",
     body: { credential },
   });
