@@ -71,6 +71,11 @@ public class AuthService {
             throw new RuntimeException("Debes consultar y completar los datos del DNI antes de registrarte");
         }
 
+        // Validar que el DNI no esté registrado
+        if (personaRepository.findByDni(request.dni()).isPresent()) {
+            throw new RuntimeException("Esta persona ya tiene una cuenta registrada");
+        }
+
         Role role = roleRepository.findByName("CLIENTE")
                 .orElseThrow(() -> new RuntimeException("Role CLIENTE not found"));
 
