@@ -12,4 +12,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> recommendByCategory(@Param("categoryId") Long categoryId, @Param("productId") Long productId);
 
     List<Product> findTop4ByCategoryIdAndStatusTrue(Long categoryId);
+
+    List<Product> findByStatusTrue();
 }

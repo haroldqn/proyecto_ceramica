@@ -1,5 +1,6 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dto.CategoryDTO;
 import com.example.backend.dto.CategoryShowcaseDTO;
 import com.example.backend.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class CategoryController {
     @GetMapping("/all")
     public ResponseEntity<List<CategoryShowcaseDTO>> getCategoriesForHome() {
         List<CategoryShowcaseDTO> response = categoryService.getHomeCategoriesWithProducts();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<CategoryDTO>> getCategories() {
+        List<CategoryDTO> response = categoryService.getHomeCategories();
         return ResponseEntity.ok(response);
     }
 }

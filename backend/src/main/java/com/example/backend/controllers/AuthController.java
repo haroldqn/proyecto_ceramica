@@ -46,19 +46,21 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         if (!request.validateEmail(request.email())) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Por favor ingrese un correo valido"));
+            return ResponseEntity.badRequest().body("Porfavor ingrese un correo valido");
         }
 
         try {
             authService.register(request);
             return ResponseEntity.ok("User registered successfully");
+
         } catch (DataIntegrityViolationException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", "Esta persona ya tiene una cuenta registrada"));
+
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", ex.getMessage()));
+
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Ocurrio un error durante el registro. Intenta nuevamente."));

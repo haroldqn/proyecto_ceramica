@@ -5,17 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryShowcaseDTO {
-    private Long categoryId;
-    private String label;
-    private String categoryName;
-    private String description;
+public class AdminProductResponse {
+    private Long id;
+    private String name;
+    private BigDecimal price;
+    private Integer stock;
     private String imageUrl;
-    private List<ProductSummaryDTO> products;
+    private Boolean status;
+    private Long categoryId;
+    private String categoryName;
 }
