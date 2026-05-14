@@ -157,7 +157,6 @@ export default function RegisterForm({ onRegister }: Props) {
       >
         {loading ? "Cargando..." : "Crear cuenta"}
       </button>
-      {error && <p className="text-sm text-red-500">{error}</p>}
     </form>
   );
 }
