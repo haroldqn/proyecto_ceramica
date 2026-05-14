@@ -1,10 +1,9 @@
 package com.example.backend.services;
 
-import com.example.backend.dto.AdminProductResponse;
-import com.example.backend.dto.ProductDetailResponse;
-import com.example.backend.dto.RelatedProductDTO;
-import com.example.backend.dto.SizeDTO;
+import com.example.backend.dto.*;
+import com.example.backend.models.Category;
 import com.example.backend.models.Product;
+import com.example.backend.repositories.CategoryRepository;
 import com.example.backend.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
+    private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
 
     public ProductDetailResponse getProductDetailsById(Long id) {
@@ -59,44 +59,99 @@ public class ProductService {
     // Logica para el Admin
     // Obtener Lista de Productos
     public List<AdminProductResponse> getAllAdminProducts() {
-        return productRepository.findAll()
+        return productRepository.findByStatusTrue()
                 .stream()
                 .map(product -> new AdminProductResponse(
                         product.getId(),
                         product.getName(),
-                        product.getPrice().doubleValue(),
+                        product.getPrice(),
                         product.getStock(),
+                        product.getImageUrl(),
+                        product.isStatus(),
+                        product.getCategory().getId(),
                         product.getCategory().getName()
                 ))
                 .toList();
     }
 
     // Crear Producto
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public AdminProductResponse createProduct(ProductRequest request) {
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+
+        Product product = new Product();
+
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setStock(request.getStock());
+        product.setImageUrl(request.getImageUrl());
+        product.setCategory(category);
+
+        // si no mandan status
+        product.setStatus(
+                request.getStatus() != null
+                        ? request.getStatus()
+                        : request.getStock() > 0
+        );
+
+        Product saved = productRepository.save(product);
+
+        return new AdminProductResponse(
+                saved.getId(),
+                saved.getName(),
+                saved.getPrice(),
+                saved.getStock(),
+                saved.getImageUrl(),
+                saved.isStatus(),
+                saved.getCategory().getId(),
+                saved.getCategory().getName()
+        );
     }
 
     // Actualizar un Producto
-    public Product updateProduct(Long id, Product updated) {
+    public AdminProductResponse updateProduct(Long id, ProductRequest request) {
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        if (updated.getName()!=null) product.setName(updated.getName());
-        if (updated.getPrice()!=null) product.setPrice(updated.getPrice());
-        if (updated.getStock()!=null) product.setStock(updated.getStock());
-        if (updated.getImageUrl()!=null) product.setImageUrl(updated.getImageUrl());
-        if (updated.getCategory()!=null) product.setCategory(updated.getCategory());
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
 
-        product.setStatus(updated.isStatus());
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setStock(request.getStock());
+        product.setImageUrl(request.getImageUrl());
+        product.setCategory(category);
 
-        return productRepository.save(product);
+        if (request.getStatus() != null) {
+            product.setStatus(request.getStatus());
+        } else {
+            product.setStatus(request.getStock() > 0);
+        }
+
+        Product updatedProduct = productRepository.save(product);
+
+        return new AdminProductResponse(
+                updatedProduct.getId(),
+                updatedProduct.getName(),
+                updatedProduct.getPrice(),
+                updatedProduct.getStock(),
+                updatedProduct.getImageUrl(),
+                updatedProduct.isStatus(),
+                updatedProduct.getCategory().getId(),
+                updatedProduct.getCategory().getName()
+        );
     }
 
     // Borrar un Producto
     public void deleteProduct(Long id) {
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        productRepository.delete(product);
+        product.setStatus(false);
+
+        productRepository.save(product);
     }
 }

@@ -11,13 +11,11 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminProductResponse {
-    private Long id;
+public class ProductRequest {
     private String name;
     private BigDecimal price;
     private Integer stock;
     private String imageUrl;
     private Boolean status;
     private Long categoryId;
-    private String categoryName;
 }
