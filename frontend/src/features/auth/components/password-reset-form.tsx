@@ -281,7 +281,7 @@ export default function PasswordResetForm({ onBackToLogin }: Props) {
           </label>
           <button
             type="submit"
-            className="cursor-pointer rounded-full border border-[rgba(67,37,22,0.35)] bg-[--foreground] p-3 font-semibold text-white shadow-[0_14px_28px_rgba(67,37,22,0.18)] transition hover:bg-[--accent-strong] disabled:cursor-not-allowed disabled:opacity-60"
+            className="cursor-pointer rounded-full border border-[rgba(67,37,22,0.35)] bg-[--foreground] p-3 font-semibold text-black shadow-[0_14px_28px_rgba(67,37,22,0.18)] transition hover:bg-[--accent-strong] disabled:cursor-not-allowed disabled:opacity-60"
             disabled={loading}
           >
             {loading ? "Guardando..." : "Cambiar contrasena"}
@@ -300,7 +300,7 @@ export default function PasswordResetForm({ onBackToLogin }: Props) {
           <button
             type="button"
             onClick={onBackToLogin}
-            className="cursor-pointer rounded-full border border-[rgba(67,37,22,0.35)] bg-[--foreground] p-3 font-semibold text-white shadow-[0_14px_28px_rgba(67,37,22,0.18)] transition hover:bg-[--accent-strong]"
+            className="cursor-pointer rounded-full border border-[rgba(67,37,22,0.35)] bg-[--foreground] p-3 font-semibold text-black shadow-[0_14px_28px_rgba(67,37,22,0.18)] transition hover:bg-[--accent-strong]"
           >
             Ir a iniciar sesion
           </button>
