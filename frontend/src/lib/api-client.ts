@@ -26,6 +26,13 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}) 
     headers.set("Content-Type", "application/json");
   }
 
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
+
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
     headers,
