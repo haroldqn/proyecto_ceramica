@@ -14,8 +14,8 @@ export default function AdminProductsPage() {
             setLoading(true);
             const data = await adminService.getProducts();
             setProducts(data);
-        } catch (err: any) {
-            setError(err.message || "Error al cargar los productos");
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "Error al cargar los productos");
         } finally {
             setLoading(false);
         }
@@ -30,8 +30,9 @@ export default function AdminProductsPage() {
             try {
                 await adminService.deleteProduct(id);
                 setProducts(products.filter(p => p.id !== id));
-            } catch (err: any) {
-                alert("Error al eliminar: " + err.message);
+            } catch (err: unknown) {
+                const message = err instanceof Error ? err.message : "Error al eliminar";
+                alert("Error al eliminar: " + message);
             }
         }
     };
