@@ -7,9 +7,10 @@ import { loginWithEmail, loginWithGoogle } from "@/features/auth/services/auth-s
 
 type Props = {
   onLogin: (user: { name: string; role: string }) => void;
+  onForgotPassword: () => void;
 };
 
-export default function LoginForm({ onLogin }: Props) {
+export default function LoginForm({ onLogin, onForgotPassword }: Props) {
   const [loading, setLoading] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [email, setEmail] = useState("");
@@ -106,11 +107,14 @@ export default function LoginForm({ onLogin }: Props) {
       />
 
       <div className="space-y-4">
-        <div className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] p-4 text-sm leading-6 text-[--muted]">
-          Usa tu cuenta de Google para entrar. Si es tu primera vez, crearemos tu acceso automáticamente.
+        <div className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] p-4">
+          <p className="text-sm font-semibold text-[--foreground]">Acceso rapido</p>
+          <p className="mt-1 text-sm leading-6 text-[--muted]">
+            Usa Google o entra con tu correo y contrasena.
+          </p>
         </div>
 
-        <div className="grid gap-4 rounded-2xl border border-[rgba(78,54,39,0.14)] bg-white p-4">
+        <div className="grid gap-4 rounded-2xl border border-[rgba(78,54,39,0.14)] bg-white p-4 shadow-[0_14px_36px_rgba(72,49,35,0.08)]">
           {clientId ? (
             <div className="flex flex-col items-center gap-3">
               <div ref={buttonRef} className="flex justify-center" />
@@ -123,36 +127,55 @@ export default function LoginForm({ onLogin }: Props) {
           )}
 
           <div className="relative py-2 text-center text-sm text-[--muted]">
-            <span className="relative bg-white px-3">o utiliza tu correo</span>
             <div className="absolute left-0 top-1/2 h-px w-full bg-[rgba(78,54,39,0.14)]" />
+            <span className="relative bg-white px-3">o utiliza tu correo</span>
           </div>
 
           <form onSubmit={handleEmailLogin} className="grid gap-3">
-            <input
-              type="email"
-              placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
-              required
-            />
-            <input
-              type="password"
-              placeholder="Contraseña"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white"
-              required
-            />
+            <label className="grid gap-1 text-sm font-semibold text-[--foreground]">
+              Correo electronico
+              <input
+                type="email"
+                placeholder="tu-correo@ejemplo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 font-normal text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white focus:shadow-[0_0_0_3px_rgba(165,111,83,0.14)]"
+                required
+              />
+            </label>
+            <label className="grid gap-1 text-sm font-semibold text-[--foreground]">
+              Contrasena
+              <input
+                type="password"
+                placeholder="Ingresa tu contrasena"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="rounded-2xl border border-[rgba(78,54,39,0.14)] bg-[#fffaf7] px-4 py-3 font-normal text-[--foreground] outline-none transition placeholder:text-[#8b7667] focus:border-[--accent] focus:bg-white focus:shadow-[0_0_0_3px_rgba(165,111,83,0.14)]"
+                required
+              />
+            </label>
+            <div className="flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={onForgotPassword}
+                className="rounded-full border border-[rgba(78,54,39,0.14)] px-4 py-2 text-sm font-semibold text-[--muted] transition hover:border-[--accent] hover:text-[--foreground]"
+              >
+                Olvide mi contrasena
+              </button>
+            </div>
             <button
               type="submit"
-              className="mt-1 cursor-pointer rounded-full bg-[--foreground] p-3 font-semibold text-black transition hover:bg-[--accent]"
+              className="mt-1 cursor-pointer rounded-full border border-[rgba(67,37,22,0.35)] bg-[--foreground] p-3 font-semibold text-black-500 shadow-[0_14px_28px_rgba(67,37,22,0.18)] transition hover:bg-[--accent-strong] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={loading}
             >
               {loading ? "Iniciando sesión..." : "Entrar con correo"}
             </button>
-            {error && <p className="text-sm text-red-500">{error}</p>}
+            {error && (
+              <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {error}
+              </p>
+            )}
           </form>
         </div>
       </div>

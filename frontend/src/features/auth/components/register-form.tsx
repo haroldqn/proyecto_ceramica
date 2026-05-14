@@ -152,11 +152,16 @@ export default function RegisterForm({ onRegister }: Props) {
       />
       <button
         type="submit"
-        className="mt-2 cursor-pointer rounded-full bg-[--foreground] p-3 font-semibold text-black transition hover:bg-[--accent]"
+        className="mt-2 cursor-pointer rounded-full border border-[rgba(67,37,22,0.35)] bg-[--foreground] p-3 font-semibold text-black-500 shadow-[0_14px_28px_rgba(67,37,22,0.18)] transition hover:bg-[--accent-strong] disabled:cursor-not-allowed disabled:opacity-60"
         disabled={loading}
       >
         {loading ? "Cargando..." : "Crear cuenta"}
       </button>
+      {error && (
+        <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          {error}
+        </p>
+      )}
     </form>
   );
 }
