@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/personas/**").permitAll()
                         .requestMatchers("/api/products/**").permitAll()
-                        .requestMatchers("/api/categories/**").permitAll()
+                        .requestMatchers("/api/categories", "/api/categories/**").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Solo para ADMIN
 
