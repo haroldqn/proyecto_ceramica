@@ -2,16 +2,27 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+<<<<<<< HEAD
 import { usePathname, useRouter } from "next/navigation";
 import type { AuthUser } from "@/features/auth/types";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
+=======
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const { user, isLoading, isAdmin } = useAuth();
+  const router = useRouter();
+>>>>>>> Jair
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
+<<<<<<< HEAD
     const storedUser = window.localStorage.getItem("user");
     const storedToken = window.localStorage.getItem("token");
 
@@ -32,6 +43,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [router]);
 
   if (checkingSession) {
+=======
+    if (!isLoading && (!user || !isAdmin)) {
+      router.push("/");
+    }
+  }, [user, isAdmin, isLoading, router]);
+
+  if (isLoading) {
+>>>>>>> Jair
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <p className="font-medium text-gray-500">Verificando credenciales...</p>
@@ -61,6 +80,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
+<<<<<<< HEAD
+=======
+  if (!user || !isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">Acceso Denegado</h2>
+          <p className="text-gray-600">No tienes permisos para acceder a esta sección.</p>
+        </div>
+      </div>
+    );
+  }
+
+>>>>>>> Jair
   const navItems = [
     { name: "Dashboard", href: "/admin/dashboard" },
     { name: "Usuarios", href: "/admin/users" },
@@ -69,10 +102,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex h-screen bg-gray-100">
+<<<<<<< HEAD
       <aside className="flex w-64 flex-col border-r border-gray-200 bg-white shadow-md">
         <div className="border-b border-gray-200 p-6">
           <h2 className="text-2xl font-bold text-gray-800">Admin Panel</h2>
           <p className="mt-1 text-sm text-gray-500">{user.name}</p>
+=======
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-md">
+        <div className="p-6 border-b border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-800">Admin Panel</h2>
+          <p className="text-sm text-gray-500 mt-1">Hola, {user.name}</p>
+>>>>>>> Jair
         </div>
         <nav className="flex-1 space-y-2 p-4">
           {navItems.map((item) => {
@@ -92,10 +132,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             );
           })}
         </nav>
+<<<<<<< HEAD
         <div className="border-t border-gray-200 p-4">
           <Link href="/" className="text-sm font-medium text-gray-500 hover:text-gray-700">
             Volver a la tienda
+=======
+        <div className="p-4 border-t border-gray-200 space-y-2">
+          <Link href="/" className="block text-sm text-gray-500 hover:text-gray-700 font-medium">
+            ← Volver a la tienda
+>>>>>>> Jair
           </Link>
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              router.push("/");
+              window.location.reload();
+            }}
+            className="block text-sm text-red-500 hover:text-red-700 font-medium"
+          >
+            Cerrar sesión
+          </button>
         </div>
       </aside>
 
