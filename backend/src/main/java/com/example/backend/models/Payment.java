@@ -26,7 +26,7 @@ public class Payment {
     @Column(nullable = false)
     private String method; // Aun no se que se usara aca jsjsj
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
     private Order order;
 }

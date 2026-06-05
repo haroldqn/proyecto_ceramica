@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Table(name = "size")
 public class Size {
     @Id
@@ -24,3 +25,5 @@ public class Size {
     @Column(nullable = false)
     private String dimension;
 }
+}
+

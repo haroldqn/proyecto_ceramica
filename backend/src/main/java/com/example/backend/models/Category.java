@@ -19,13 +19,27 @@ public class Category {
     private Long id;
 
     @Column(nullable = false)
+    private String label;
+
+    @Column(nullable = false)
     private String name;
+
 
     @Column(length = 500)
     private String description;
 
     @Column(name = "image-url")
     private String imageUrl;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private boolean eventStatus;
+
 }
 
 

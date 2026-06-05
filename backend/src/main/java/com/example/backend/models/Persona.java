@@ -20,4 +20,19 @@ public class Persona {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(length = 8, unique = true)
+    private String dni;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "mother_last_name")
+    private String motherLastName;
+
+    @Column(name = "birth_date")
+    private String birthDate;
 }
