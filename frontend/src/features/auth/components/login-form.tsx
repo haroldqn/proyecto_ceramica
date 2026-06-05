@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import toast from "react-hot-toast";
+import { notifyAuthChanged } from "@/features/auth/hooks/useAuth";
 import { loginWithEmail, loginWithGoogle } from "@/features/auth/services/auth-service";
 
 type Props = {
@@ -44,6 +45,7 @@ export default function LoginForm({ onLogin, onForgotPassword }: Props) {
             const data = await loginWithGoogle(credential);
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify({ name: data.name, role: data.role }));
+            notifyAuthChanged();
             toast.success(`¡Bienvenido ${data.name}!`);
             onLogin({ name: data.name, role: data.role });
           } catch (err: unknown) {
@@ -86,6 +88,7 @@ export default function LoginForm({ onLogin, onForgotPassword }: Props) {
       const data = await loginWithEmail({ email, password });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify({ name: data.name, role: data.role }));
+      notifyAuthChanged();
       toast.success(`¡Bienvenido ${data.name}!`);
       onLogin({ name: data.name, role: data.role });
     } catch (err: unknown) {

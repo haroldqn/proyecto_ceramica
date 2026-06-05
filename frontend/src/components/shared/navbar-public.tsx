@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AuthModal from "@/features/auth/components/auth-modal";
 import { useCart } from "@/features/cart/cart-context";
+import { AUTH_CHANGED_EVENT, notifyAuthChanged } from "@/features/auth/hooks/useAuth";
 import type { AuthUser } from "@/features/auth/types";
 
 export default function Navbar() {
@@ -25,26 +26,42 @@ export default function Navbar() {
   useEffect(() => {
     const syncUserFromStorage = () => {
       const storedUser = window.localStorage.getItem("user");
-      setUser(storedUser ? (JSON.parse(storedUser) as AuthUser) : null);
+
+      if (!storedUser) {
+        setUser(null);
+        return;
+      }
+
+      try {
+        setUser(JSON.parse(storedUser) as AuthUser);
+      } catch {
+        window.localStorage.removeItem("user");
+        window.localStorage.removeItem("token");
+        setUser(null);
+      }
     };
 
     syncUserFromStorage();
     window.addEventListener("storage", syncUserFromStorage);
+    window.addEventListener(AUTH_CHANGED_EVENT, syncUserFromStorage);
 
     return () => {
       window.removeEventListener("storage", syncUserFromStorage);
+      window.removeEventListener(AUTH_CHANGED_EVENT, syncUserFromStorage);
     };
   }, []);
 
   const handleLogin = (userData: AuthUser) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    notifyAuthChanged();
   };
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    notifyAuthChanged();
     setShowDropdown(false);
   };
 

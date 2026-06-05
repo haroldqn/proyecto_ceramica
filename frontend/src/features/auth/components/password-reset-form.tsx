@@ -39,17 +39,14 @@ export default function PasswordResetForm({ onBackToLogin }: Props) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const showError = (message: string) => {
-    setError(message);
     toast.error(message);
   };
 
   const handleRequestCode = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       await requestPasswordReset({ email });
@@ -65,7 +62,6 @@ export default function PasswordResetForm({ onBackToLogin }: Props) {
   const handleVerifyCode = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       await verifyPasswordResetCode({ email, code });
@@ -80,7 +76,6 @@ export default function PasswordResetForm({ onBackToLogin }: Props) {
 
   const handleConfirmPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
 
     if (newPassword.length < 6) {
       showError("La nueva contrasena debe tener al menos 6 caracteres");
@@ -107,7 +102,6 @@ export default function PasswordResetForm({ onBackToLogin }: Props) {
 
   const handleResendCode = async () => {
     setLoading(true);
-    setError("");
 
     try {
       await requestPasswordReset({ email });
@@ -306,12 +300,6 @@ export default function PasswordResetForm({ onBackToLogin }: Props) {
           </button>
         </div>
       )}
-
-      {/*  error && (
-        <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-          {error}
-        </p>
-      )*/}
 
       {step !== "done" && (
         <button

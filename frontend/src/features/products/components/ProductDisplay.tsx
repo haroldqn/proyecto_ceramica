@@ -122,7 +122,7 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
             <div className="image-card overflow-hidden rounded-[1.6rem]">
               <div className="relative aspect-square w-full">
                 <Image
-                  src={product.imageUrl}
+                  src={product.imageUrl || "/categorias/default.webp"}
                   alt={product.name}
                   fill
                   className="object-cover"
@@ -284,7 +284,7 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
                   <div className="image-card overflow-hidden rounded-[1.2rem]">
                     <div className="relative aspect-square w-full">
                       <Image
-                        src={related.imageUrl}
+                        src={related.imageUrl || "/categorias/default.webp"} 
                         alt={related.name}
                         fill
                         className="object-cover transition duration-500 group-hover:scale-[1.03]"
