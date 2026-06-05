@@ -24,32 +24,24 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-
-    @Column(name = "image_url")
-
     @Column(nullable = false, name = "image_url")
-
     private String imageUrl;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    private Boolean status;
-
     @Column(nullable = false)
     private Integer stock;
 
-    private boolean status = true; // toods inician en true, si c acaba pasa false
+    private boolean status = true; // todos inician en true, si se acaba pasa false
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_category")
     private Category category;
 
-
     @ManyToOne
     @JoinColumn(name = "id_size")
     private Size size;
-}
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -59,4 +51,3 @@ public class Product {
     )
     private List<Size> sizes;
 }
-

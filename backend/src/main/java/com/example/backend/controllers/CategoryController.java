@@ -8,12 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.backend.dto.CategoryDTO;
 import com.example.backend.dto.CategoryShowcaseDTO;
 import com.example.backend.services.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 
 import java.util.List;
 
@@ -25,16 +20,13 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @GetMapping
     public List<Category> getAll() {
         return categoryRepository.findAll();
     }
-}
-
-public class CategoryController {
-
-    @Autowired
-    private CategoryService categoryService;
 
     @GetMapping("/all")
     public ResponseEntity<List<CategoryShowcaseDTO>> getCategoriesForHome() {
@@ -48,4 +40,3 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
 }
-
