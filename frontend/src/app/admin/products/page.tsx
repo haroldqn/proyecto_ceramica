@@ -16,12 +16,6 @@ export default function AdminProductsPage() {
     const fetchData = async () => {
         try {
             setLoading(true);
-<<<<<<< HEAD
-            const data = await adminService.getProducts();
-            setProducts(data);
-        } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : "Error al cargar los productos");
-=======
             const [productsData, categoriesData] = await Promise.all([
                 adminService.getProducts(),
                 adminService.getCategories()
@@ -30,7 +24,6 @@ export default function AdminProductsPage() {
             setCategories(categoriesData);
         } catch (err: any) {
             setError(err.message || "Error al cargar los datos");
->>>>>>> Jair
         } finally {
             setLoading(false);
         }
