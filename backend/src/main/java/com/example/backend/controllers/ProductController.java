@@ -1,5 +1,10 @@
 package com.example.backend.controllers;
 
+import com.example.backend.models.Product;
+import com.example.backend.repositories.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import com.example.backend.dto.ProductDetailResponse;
 import com.example.backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/products")
 @CrossOrigin(origins = "*")
 public class ProductController {
+
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @GetMapping
+    public List<Product> getAll() {
+        return productRepository.findAll();
+    }
+}
+
     @Autowired
     private ProductService productService;
 
@@ -20,3 +36,4 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 }
+

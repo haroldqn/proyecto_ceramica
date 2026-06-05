@@ -19,16 +19,19 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productToEdit, setProductToEdit] = useState<AdminProductResponse | null>(null);
+  const [productToEdit, setProductToEdit] =
+    useState<AdminProductResponse | null>(null);
 
   const fetchData = async () => {
     try {
       setLoading(true);
       setError("");
+
       const [productsData, categoriesData] = await Promise.all([
         adminService.getProducts(),
         adminService.getCategories(),
       ]);
+
       setProducts(productsData);
       setCategories(categoriesData);
     } catch (err: unknown) {
@@ -43,13 +46,15 @@ export default function AdminProductsPage() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Estas seguro de que deseas eliminar este producto?")) {
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
       return;
     }
 
     try {
       await adminService.deleteProduct(id);
-      setProducts((currentProducts) => currentProducts.filter((product) => product.id !== id));
+      setProducts((currentProducts) =>
+        currentProducts.filter((product) => product.id !== id)
+      );
     } catch (err: unknown) {
       alert("Error al eliminar: " + getErrorMessage(err, "Error al eliminar"));
     }
@@ -59,7 +64,9 @@ export default function AdminProductsPage() {
     if (id) {
       const updated = await adminService.updateProduct(id, data);
       setProducts((currentProducts) =>
-        currentProducts.map((product) => (product.id === id ? updated : product))
+        currentProducts.map((product) =>
+          product.id === id ? updated : product
+        )
       );
       return;
     }
@@ -89,7 +96,10 @@ export default function AdminProductsPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-slate-900">Gestion de Productos</h1>
+        <h1 className="text-3xl font-bold text-slate-900">
+          Gestión de Productos
+        </h1>
+
         <button
           onClick={openNewModal}
           className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
@@ -119,21 +129,26 @@ export default function AdminProductsPage() {
               </th>
             </tr>
           </thead>
+
           <tbody className="divide-y divide-slate-200 bg-white">
             {products.map((product) => (
               <tr key={product.id} className="hover:bg-slate-50">
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">
                   {product.id}
                 </td>
+
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">
                   {product.name}
                 </td>
+
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">
                   S/ {product.price}
                 </td>
+
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">
                   {product.stock}
                 </td>
+
                 <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                   <button
                     onClick={() => openEditModal(product)}
@@ -141,6 +156,7 @@ export default function AdminProductsPage() {
                   >
                     Editar
                   </button>
+
                   <button
                     onClick={() => handleDelete(product.id)}
                     className="text-red-600 hover:text-red-900"
@@ -150,6 +166,7 @@ export default function AdminProductsPage() {
                 </td>
               </tr>
             ))}
+
             {products.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-6 py-4 text-center text-slate-500">

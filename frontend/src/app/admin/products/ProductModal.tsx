@@ -35,7 +35,9 @@ export default function ProductModal({
   productToEdit,
   categories,
 }: ProductModalProps) {
-  const [formData, setFormData] = useState<AdminProductRequest>(emptyProductForm);
+  const [formData, setFormData] =
+    useState<AdminProductRequest>(emptyProductForm);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -48,18 +50,15 @@ export default function ProductModal({
         status: productToEdit.status,
         categoryId: productToEdit.categoryId,
       });
-      return;
+    } else {
+      setFormData({
+        ...emptyProductForm,
+        categoryId: categories[0]?.categoryId ?? 0,
+      });
     }
-
-    setFormData({
-      ...emptyProductForm,
-      categoryId: categories[0]?.categoryId ?? 0,
-    });
   }, [productToEdit, categories, isOpen]);
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -75,16 +74,19 @@ export default function ProductModal({
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = event.target;
+
     const parsedValue =
       type === "number"
         ? value === ""
           ? 0
           : Number(value)
         : type === "checkbox"
-          ? (event.target as HTMLInputElement).checked
-          : value;
+        ? (event.target as HTMLInputElement).checked
+        : value;
 
     setFormData((prev) => ({
       ...prev,
@@ -99,14 +101,21 @@ export default function ProductModal({
           <h2 className="text-xl font-bold text-slate-800">
             {productToEdit ? "Editar Producto" : "Nuevo Producto"}
           </h2>
-          <button onClick={onClose} className="text-slate-400 transition-colors hover:text-slate-600">
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-slate-400 transition-colors hover:text-slate-600"
+          >
             X
           </button>
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="space-y-4 p-6">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">Nombre</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">
+              Nombre
+            </label>
             <input
               type="text"
               name="name"
@@ -119,7 +128,9 @@ export default function ProductModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Precio (S/)</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Precio (S/)
+              </label>
               <input
                 type="number"
                 name="price"
@@ -131,8 +142,11 @@ export default function ProductModal({
                 className="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
+
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Stock</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Stock
+              </label>
               <input
                 type="number"
                 name="stock"
@@ -146,7 +160,9 @@ export default function ProductModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">Categoria</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">
+              Categoría
+            </label>
             <select
               name="categoryId"
               value={formData.categoryId}
@@ -159,12 +175,17 @@ export default function ProductModal({
                   {category.categoryName}
                 </option>
               ))}
-              {categories.length === 0 && <option value="0">Sin categorias disponibles</option>}
+
+              {categories.length === 0 && (
+                <option value="0">Sin categorías disponibles</option>
+              )}
             </select>
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">URL de Imagen</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">
+              URL de Imagen
+            </label>
             <input
               type="text"
               name="imageUrl"
@@ -199,6 +220,7 @@ export default function ProductModal({
             >
               Cancelar
             </button>
+
             <button
               type="submit"
               disabled={isSubmitting || categories.length === 0}

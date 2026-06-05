@@ -24,6 +24,13 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
+
+    @Column(length = 500)
+    private String description;
+
+    @Column(name = "image-url")
+    private String imageUrl;
+
     @Column(nullable = false)
     private String description;
 
@@ -32,4 +39,7 @@ public class Category {
 
     @Column(nullable = false)
     private boolean eventStatus;
+
 }
+
+

@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
+@Table(name = "size")
 public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,3 +25,5 @@ public class Size {
     @Column(nullable = false)
     private String dimension;
 }
+}
+

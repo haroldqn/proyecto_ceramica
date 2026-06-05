@@ -1,6 +1,6 @@
-﻿"use client";
+"use client"; 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthModal from "@/features/auth/components/auth-modal";
 import type { AuthUser } from "@/features/auth/types";
 import CategoryCard from "@/features/home/components/category-card";
@@ -17,6 +17,14 @@ import ProductCard from "@/features/products/components/product-card";
 export default function Home() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [productos, setProductos] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/products")
+      .then((res) => res.json())
+      .then((data) => setProductos(data))
+      .catch((error) => console.error("Error al cargar productos:", error));
+  }, []);
 
   return (
     <>
@@ -52,27 +60,6 @@ export default function Home() {
                   Explorar colecciones
                 </a>
               </div>
-
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="rounded-[1.5rem] border border-[--border-soft] bg-white/80 p-4">
-                  <p className="text-xs uppercase tracking-[0.24em] text-[--muted]">
-                    Piezas
-                  </p>
-                  <p className="mt-3 font-display text-4xl text-[--foreground]">40+</p>
-                </div>
-                <div className="rounded-[1.5rem] border border-[--border-soft] bg-white/80 p-4">
-                  <p className="text-xs uppercase tracking-[0.24em] text-[--muted]">
-                    Acabado
-                  </p>
-                  <p className="mt-3 font-display text-4xl text-[--foreground]">Brillante </p>
-                </div>
-                <div className="rounded-[1.5rem] border border-[--border-soft] bg-white/80 p-4">
-                  <p className="text-xs uppercase tracking-[0.24em] text-[--muted]">
-                    Hecho
-                  </p>
-                  <p className="mt-3 font-display text-4xl text-[--foreground]">A mano</p>
-                </div>
-              </div>
             </div>
 
             <HeroShowcase />
@@ -99,16 +86,22 @@ export default function Home() {
           <div className="space-y-10">
             <SectionHeading
               eyebrow="Destacados"
-              title="Productos con lenguaje limpio y carácter artesanal."
-              description="Descubre piezas únicas de cerámica, creadas para decorar y dar vida a tus espacios."
+              title="Productos desde la base de datos."
+              description="Estos productos vienen desde el backend Spring Boot."
               fullWidth
             />
 
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {featuredProducts.map((product) => (
+              {productos.map((p) => (
                 <ProductCard
-                  key={product.id}
-                  producto={product}
+                  key={p.id_product}
+                  producto={{
+                    id: p.id_product,
+                    nombre: p.name,
+                    precio: p.price,
+                    imageUrl: p.image_url,
+                    stock: p.stock,
+                  }}
                   user={user}
                   onRequireAuth={() => setShowModal(true)}
                 />
@@ -129,20 +122,6 @@ export default function Home() {
               <p className="mt-5 max-w-xl text-base leading-8 text-[--muted]">
                 De la idea a la pieza final, cada etapa está cuidada para lograr un resultado único y hecho a mano.
               </p>
-              <div className="mt-10 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-[1.75rem] bg-white/75 p-5">
-                  <p className="font-display text-3xl text-[--foreground]">01</p>
-                  <p className="mt-2 text-sm leading-6 text-[--muted]">
-                    Damos forma a cada pieza desde cero, cuidando cada detalle en el modelado.
-                  </p>
-                </div>
-                <div className="rounded-[1.75rem] bg-white/75 p-5">
-                  <p className="font-display text-3xl text-[--foreground]">02</p>
-                  <p className="mt-2 text-sm leading-6 text-[--muted]">
-                    Aplicamos color y acabados que resaltan el carácter artesanal de cada pieza.
-                  </p>
-                </div>
-              </div>
             </div>
 
             <div className="grid gap-5">

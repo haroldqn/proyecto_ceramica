@@ -1,5 +1,10 @@
 package com.example.backend.controllers;
 
+import com.example.backend.models.Category;
+import com.example.backend.repositories.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import com.example.backend.dto.CategoryDTO;
 import com.example.backend.dto.CategoryShowcaseDTO;
 import com.example.backend.services.CategoryService;
@@ -9,10 +14,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
+@CrossOrigin(origins = "*")
+public class CategoryController {
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @GetMapping
+    public List<Category> getAll() {
+        return categoryRepository.findAll();
+    }
+}
+
 public class CategoryController {
 
     @Autowired
@@ -30,3 +48,4 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
 }
+

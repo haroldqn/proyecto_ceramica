@@ -29,9 +29,10 @@ export type PasswordResetVerifyPayload = {
   code: string;
 };
 
-export type PasswordResetConfirmPayload = PasswordResetVerifyPayload & {
-  newPassword: string;
-};
+export type PasswordResetConfirmPayload =
+  PasswordResetVerifyPayload & {
+    newPassword: string;
+  };
 
 export function registerUser(payload: RegisterPayload) {
   return apiRequest<string>("/api/auth/register", {
@@ -54,23 +55,38 @@ export function loginWithGoogle(credential: string) {
   });
 }
 
-export function requestPasswordReset(payload: PasswordResetRequestPayload) {
-  return apiRequest<{ message: string }>("/api/auth/password-reset/request", {
-    method: "POST",
-    body: payload,
-  });
+export function requestPasswordReset(
+  payload: PasswordResetRequestPayload
+) {
+  return apiRequest<{ message: string }>(
+    "/api/auth/password-reset/request",
+    {
+      method: "POST",
+      body: payload,
+    }
+  );
 }
 
-export function verifyPasswordResetCode(payload: PasswordResetVerifyPayload) {
-  return apiRequest<{ message: string }>("/api/auth/password-reset/verify", {
-    method: "POST",
-    body: payload,
-  });
+export function verifyPasswordResetCode(
+  payload: PasswordResetVerifyPayload
+) {
+  return apiRequest<{ message: string }>(
+    "/api/auth/password-reset/verify",
+    {
+      method: "POST",
+      body: payload,
+    }
+  );
 }
 
-export function confirmPasswordReset(payload: PasswordResetConfirmPayload) {
-  return apiRequest<{ message: string }>("/api/auth/password-reset/confirm", {
-    method: "POST",
-    body: payload,
-  });
+export function confirmPasswordReset(
+  payload: PasswordResetConfirmPayload
+) {
+  return apiRequest<{ message: string }>(
+    "/api/auth/password-reset/confirm",
+    {
+      method: "POST",
+      body: payload,
+    }
+  );
 }
