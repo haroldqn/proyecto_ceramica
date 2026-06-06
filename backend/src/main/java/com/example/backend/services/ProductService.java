@@ -13,16 +13,30 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
 
     public ProductDetailResponse getProductDetailsById(Long id) {
+        logger.info("Buscando producto id {}", id);
+
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Este producto no Existe"));
+                .orElseThrow(() -> {
+                    logger.warn("Producto no encontrado. Id: {}", id);
+
+                    return new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Este producto no Existe"
+                    );
+                });
+
+        logger.info("Producto encontrado: {}", product.getName());
 
         boolean status = product.getStock() >= 0; // faltaba el "=" :v
 
@@ -76,9 +90,13 @@ public class ProductService {
 
     // Crear Producto
     public AdminProductResponse createProduct(ProductRequest request) {
+        logger.info("Creando producto...");
 
         Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+                .orElseThrow(() -> {
+                    logger.error("Categoria no encontrada: id {}", request.getCategoryId());
+                    return new RuntimeException("Categoria no encontrada");
+                });
 
         Product product = new Product();
 
@@ -96,6 +114,7 @@ public class ProductService {
         );
 
         Product saved = productRepository.save(product);
+        logger.info("Producto creado con id: {}", saved.getId());
 
         return new AdminProductResponse(
                 saved.getId(),
@@ -111,9 +130,13 @@ public class ProductService {
 
     // Actualizar un Producto
     public AdminProductResponse updateProduct(Long id, ProductRequest request) {
+        logger.info("Buscando producto con id {}", id);
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> {
+                    logger.error("Producto no encontrado. Id: {}", id);
+                    return new RuntimeException("Producto no encontrado");
+                });
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
@@ -131,6 +154,7 @@ public class ProductService {
         }
 
         Product updatedProduct = productRepository.save(product);
+        logger.info("Producto acutalizado con id: {}", updatedProduct.getId());
 
         return new AdminProductResponse(
                 updatedProduct.getId(),
@@ -146,12 +170,17 @@ public class ProductService {
 
     // Borrar un Producto
     public void deleteProduct(Long id) {
+        logger.info("Buscando producto con id {}", id);
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> {
+                    logger.error("Producto no encontrado. Id: {}", id);
+                    return new RuntimeException("Producto no encontrado");
+                });
 
         product.setStatus(false);
 
         productRepository.save(product);
+        logger.info("Producto inactivo: {}", id);
     }
 }
