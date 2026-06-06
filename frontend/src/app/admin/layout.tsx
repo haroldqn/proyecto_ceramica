@@ -17,7 +17,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
 
     if (isAdminLogin && user && isAdmin) {
-      router.replace("/admin/productos");
+      router.replace("/admin/dashboard");
       return;
     }
 
@@ -50,6 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   const navItems = [
+    { name: "Inicio", href: "/admin/dashboard" },
     { name: "Usuarios", href: "/admin/users" },
     { name: "Productos", href: "/admin/productos" },
   ];

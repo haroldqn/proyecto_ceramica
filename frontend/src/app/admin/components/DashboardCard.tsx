@@ -1,0 +1,30 @@
+"use client";
+
+import { FaDollarSign, FaUsers, FaBox } from "react-icons/fa";
+
+interface DashboardCardProps {
+    title: string;
+    value: number | string;
+    iconType: "sales" | "users" | "inventory";
+}
+
+export default function DashboardCard({ title, value, iconType }: DashboardCardProps) {
+    const icons = {
+        sales: <FaDollarSign className="w-8 h-8 text-black" />,
+        users: <FaUsers className="w-8 h-8 text-black" />,
+        inventory: <FaBox className="w-8 h-8 text-black" />,
+    };
+
+    return (
+        <div className="flex items-center justify-between p-6 bg-white 
+        border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow min-w-[240px] flex-1">
+            <div className="space-y-1">
+                <p className="text-sm font-bold text-slate-900 tracking-tight">{title}</p>
+                <p className="text-3xl font-bold text-slate-900">{value}</p>
+            </div>
+            <div className="p-3 bg-[#EEF2EE] rounded-xl flex items-center justify-center">
+                {icons[iconType]}
+            </div>
+        </div>
+    );
+}
