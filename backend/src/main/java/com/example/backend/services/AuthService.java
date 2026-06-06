@@ -12,6 +12,7 @@ import com.example.backend.repositories.PersonaRepository;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -66,8 +67,8 @@ public class AuthService {
             throw new RuntimeException("El email ya existe");
         }
 
-        if (isBlank(request.dni()) || isBlank(request.firstName()) || isBlank(request.lastName())
-                || isBlank(request.motherLastName())) {
+        if (StringUtils.isBlank(request.dni()) || StringUtils.isBlank(request.firstName()) || StringUtils.isBlank(request.lastName())
+                || StringUtils.isBlank(request.motherLastName())) {
             throw new RuntimeException("Debes consultar y completar los datos del DNI antes de registrarte");
         }
 
@@ -135,26 +136,22 @@ public class AuthService {
         ).trim();
     }
 
-    private boolean isBlank(String value) {
-        return value == null || value.isBlank();
-    }
-
     private String resolveDisplayName(GoogleTokenInfoResponse tokenInfo) {
-        if (!isBlank(tokenInfo.name())) {
+        if (!StringUtils.isBlank(tokenInfo.name())) {
             return tokenInfo.name().trim();
         }
         return String.join(" ", resolveFirstName(tokenInfo), resolveLastName(tokenInfo)).trim();
     }
 
     private String resolveFirstName(GoogleTokenInfoResponse tokenInfo) {
-        if (!isBlank(tokenInfo.givenName())) {
+        if (!StringUtils.isBlank(tokenInfo.givenName())) {
             return tokenInfo.givenName().trim();
         }
-        return !isBlank(tokenInfo.name()) ? tokenInfo.name().trim() : "Usuario";
+        return !StringUtils.isBlank(tokenInfo.name()) ? tokenInfo.name().trim() : "Usuario";
     }
 
     private String resolveLastName(GoogleTokenInfoResponse tokenInfo) {
-        if (!isBlank(tokenInfo.familyName())) {
+        if (!StringUtils.isBlank(tokenInfo.familyName())) {
             return tokenInfo.familyName().trim();
         }
         return "";
