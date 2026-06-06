@@ -4,6 +4,7 @@ import com.example.backend.dto.CategoryDTO;
 import com.example.backend.dto.CategoryShowcaseDTO;
 import com.example.backend.dto.ProductSummaryDTO;
 import com.example.backend.models.Category;
+import com.example.backend.models.Product;
 import com.example.backend.repositories.CategoryRepository;
 import com.example.backend.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,6 @@ public class CategoryService {
     }
 
     public List<CategoryDTO> getHomeCategories() {
-
         return categoryRepository.findByEventStatusTrue().stream().map(category -> new CategoryDTO(
                 category.getId(),
                 category.getLabel(),

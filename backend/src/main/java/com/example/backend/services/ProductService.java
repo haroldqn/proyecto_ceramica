@@ -6,15 +6,14 @@ import com.example.backend.models.Product;
 import com.example.backend.repositories.CategoryRepository;
 import com.example.backend.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 @RequiredArgsConstructor
@@ -29,16 +28,15 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.warn("Producto no encontrado. Id: {}", id);
-
                     return new ResponseStatusException(
                             HttpStatus.NOT_FOUND,
-                            "Este producto no Existe"
+                            "este producto no Existe"
                     );
                 });
 
         logger.info("Producto encontrado: {}", product.getName());
 
-        boolean status = product.getStock() >= 0; // faltaba el "=" :v
+        boolean status = product.getStock() > 0;
 
         List<RelatedProductDTO> relatedProductDTO = productRepository
                 .recommendByCategory(product.getCategory().getId(), product.getId())
@@ -46,9 +44,7 @@ public class ProductService {
                 .map(RelatedProductDTO::new)
                 .collect(Collectors.toList());
 
-        // coleccion de talla
-        List<SizeDTO> sizesDTO = product.getSizes().
-                stream()
+        List<SizeDTO> sizesDTO = product.getSizes().stream()
                 .map(size -> new SizeDTO(
                         size.getId(),
                         size.getName(),
@@ -70,8 +66,6 @@ public class ProductService {
         );
     }
 
-    // Logica para el Admin
-    // Obtener Lista de Productos
     public List<AdminProductResponse> getAllAdminProducts() {
         return productRepository.findByStatusTrue()
                 .stream()
@@ -88,7 +82,6 @@ public class ProductService {
                 .toList();
     }
 
-    // Crear Producto
     public AdminProductResponse createProduct(ProductRequest request) {
         logger.info("Creando producto...");
 
@@ -99,14 +92,12 @@ public class ProductService {
                 });
 
         Product product = new Product();
-
         product.setName(request.getName());
         product.setPrice(request.getPrice());
         product.setStock(request.getStock());
         product.setImageUrl(request.getImageUrl());
         product.setCategory(category);
 
-        // si no mandan status
         product.setStatus(
                 request.getStatus() != null
                         ? request.getStatus()
@@ -128,7 +119,6 @@ public class ProductService {
         );
     }
 
-    // Actualizar un Producto
     public AdminProductResponse updateProduct(Long id, ProductRequest request) {
         logger.info("Buscando producto con id {}", id);
 
@@ -154,7 +144,7 @@ public class ProductService {
         }
 
         Product updatedProduct = productRepository.save(product);
-        logger.info("Producto acutalizado con id: {}", updatedProduct.getId());
+        logger.info("Producto actualizado con id: {}", updatedProduct.getId());
 
         return new AdminProductResponse(
                 updatedProduct.getId(),
@@ -168,7 +158,6 @@ public class ProductService {
         );
     }
 
-    // Borrar un Producto
     public void deleteProduct(Long id) {
         logger.info("Buscando producto con id {}", id);
 
@@ -179,7 +168,6 @@ public class ProductService {
                 });
 
         product.setStatus(false);
-
         productRepository.save(product);
         logger.info("Producto inactivo: {}", id);
     }
