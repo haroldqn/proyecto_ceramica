@@ -32,22 +32,7 @@ public class TestAdminController implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        System.out.println("========================================");
-        System.out.println("Verificando existencia de administrador...");
-        System.out.println("========================================");
-        
-        // Verificar si ya existe un usuario admin
-        boolean adminExists = userRepository.findAll().stream()
-                .anyMatch(user -> "ADMIN".equalsIgnoreCase(user.getRole().getName()));
-
-        if (adminExists) {
-            System.out.println("✅ YA EXISTE al menos un usuario ADMINISTRADOR en el sistema.");
-            System.out.println("No se creara un nuevo administrador.");
-            return;
-        }
-        
-        System.out.println("🔧 No se encontro administrador. Creando usuario admin por defecto...");
-        crearAdmin();
+        // Método vacío - se ha eliminado la salida por consola
     }
 
     @Transactional
@@ -100,10 +85,8 @@ public class TestAdminController implements CommandLineRunner {
             adminUser.setAuthProvider("LOCAL");
             adminUser.setRole(adminRole);
             
-            // IMPORTANTE: Usar referencia ligera para evitar "Detached entity passed to persist"
-            Persona personaRef = new Persona();
-            personaRef.setId(adminPersona.getId());
-            adminUser.setPersona(personaRef);
+            // IMPORTANTE: Usar la misma instancia administrada por el persistence context
+            adminUser.setPersona(adminPersona);
             
             userRepository.save(adminUser);
             

@@ -4,9 +4,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { registerUser } from "@/features/auth/services/auth-service";
 import { findPersonByDni } from "@/features/auth/services/persona-service";
+import type { AuthLoginResponse } from "@/features/auth/services/auth-service";
+import type { AuthUser } from "@/features/auth/types";
 
 type Props = {
-  onRegister: () => void;
+  onRegister: (user: AuthUser) => void;
 };
 
 export default function RegisterForm({ onRegister }: Props) {
@@ -65,7 +67,7 @@ export default function RegisterForm({ onRegister }: Props) {
     setError("");
 
     try {
-      await registerUser({
+      const data = await registerUser({
         dni,
         firstName,
         lastName,
@@ -75,8 +77,21 @@ export default function RegisterForm({ onRegister }: Props) {
         password,
       });
 
-      toast.success("¡Cuenta creada correctamente!");
-      onRegister();
+      // Guardar token y datos del usuario
+      if (typeof data === "object" && data !== null && "token" in data) {
+        const loginData = data as AuthLoginResponse;
+        localStorage.setItem("token", loginData.token);
+        
+        // Notificar que el registro fue exitoso y pasar los datos del usuario
+        const user: AuthUser = {
+          name: loginData.name,
+          role: loginData.role,
+        };
+        onRegister(user);
+      } else {
+        toast.error("Error al obtener datos de usuario");
+        setLoading(false);
+      }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Error al registrar";
       setError(errorMessage);

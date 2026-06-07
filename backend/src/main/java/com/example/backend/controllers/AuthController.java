@@ -50,8 +50,8 @@ public class AuthController {
         }
 
         try {
-            authService.register(request);
-            return ResponseEntity.ok("User registered successfully");
+            LoginResponse response = authService.register(request);
+            return ResponseEntity.ok(response);
 
         } catch (DataIntegrityViolationException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

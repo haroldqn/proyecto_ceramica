@@ -7,13 +7,19 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO para productos destacados en el home
+ * Retorna: imagen, nombre, precio, descripción corta
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SizeDTO {
+public class HomeProductDTO {
     private Long id;
     private String name;
-    private String dimension;
     private BigDecimal price;
+    private String imageUrl;
+    private String shortDescription;
+    private String categoryLabel;
 }

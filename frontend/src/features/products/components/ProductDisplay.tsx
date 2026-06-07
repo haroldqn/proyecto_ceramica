@@ -90,11 +90,30 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
     );
   }
 
+  // Orden personalizado para tamaños: Pulga (1), Dije (2), Mini (3), Small (4), Super Small (5)
+  const ordenTamanos: Record<string, number> = {
+    "Pulga": 1,
+    "Dije": 2,
+    "Mini": 3,
+    "Small": 4,
+    "Super Small": 5,
+  };
+
   const aumentar = () => setCantidad((prev) => (prev < product.stock ? prev + 1 : prev));
   const disminuir = () => setCantidad((prev) => (prev > 1 ? prev - 1 : 1));
+
+  // Ordenar tamaños segun el orden personalizado
+  const sortedSizes = [...product.sizes].sort((a, b) => {
+    const orderA = ordenTamanos[a.name] ?? 99;
+    const orderB = ordenTamanos[b.name] ?? 99;
+    return orderA - orderB;
+  });
+
   const selectedSize =
-    product.sizes.find((size) => size.id === selectedSizeId) ?? product.sizes[0];
-  const formattedPrice = `S/${Number(product.price).toFixed(2)}`;
+    sortedSizes.find((size) => size.id === selectedSizeId) ?? sortedSizes[0];
+  // Usar el precio del tamaño seleccionado si está disponible, sino el precio base del producto
+  const currentPrice = selectedSize?.price ?? product.price;
+  const formattedPrice = `S/${Number(currentPrice).toFixed(2)}`;
   const handleAddToCart = () => {
     if (!selectedSize) {
       toast.error("Selecciona un tamaño");
@@ -104,7 +123,7 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
     addItem({
       productId: product.id,
       name: product.name,
-      price: Number(product.price),
+      price: Number(currentPrice),
       imageUrl: product.imageUrl,
       sizeId: selectedSize.id,
       sizeName: selectedSize.name,
@@ -122,8 +141,7 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
             <div className="image-card overflow-hidden rounded-[1.6rem]">
               <div className="relative aspect-square w-full">
                 <Image
-
-                  src={product.imageUrl || "/categorias/default.webp"
+                  src={product.imageUrl || "/categorias/default.webp"}
                   alt={product.name}
                   fill
                   className="object-cover"
@@ -162,7 +180,7 @@ export default function ProductDisplay({ productId }: ProductDisplayProps) {
                     Tamaños
                   </h2>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    {product.sizes.map((size) => {
+                    {sortedSizes.map((size) => {
                       const isSelected = selectedSize?.id === size.id;
 
                       return (

@@ -15,8 +15,8 @@ export interface ProductSize {
     id: number;
     name: string;
     dimension: string;
+    price: number;
 }
-
 export interface RelatedProduct {
     id: number;
     name: string;

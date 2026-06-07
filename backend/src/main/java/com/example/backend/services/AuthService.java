@@ -77,7 +77,7 @@ public class AuthService {
         return new LoginResponse(token, user.getPersona().getName(), user.getRole().getName());
     }
 
-    public void register(RegisterRequest request) {
+    public LoginResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new RuntimeException("El email ya existe");
         }
@@ -112,6 +112,16 @@ public class AuthService {
 
         user.setPersona(persona);
         userRepository.save(user);
+
+        // Generar token y devolver respuesta de login
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .roles(user.getRole().getName())
+                .build();
+        String token = jwtService.generateToken(userDetails);
+
+        return new LoginResponse(token, persona.getName(), role.getName());
     }
 
     public void requestPasswordReset(PasswordResetRequest request) {

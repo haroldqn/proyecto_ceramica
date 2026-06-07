@@ -20,8 +20,9 @@ export default function AuthModal({ onClose, onLogin }: AuthModalProps) {
     onClose();
   };
 
-  const handleRegisterSuccess = () => {
-    setMode("login");
+  const handleRegisterSuccess = (user: AuthUser) => {
+    onLogin(user);
+    onClose();
   };
 
   return (

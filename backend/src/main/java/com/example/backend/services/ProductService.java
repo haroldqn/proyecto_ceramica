@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,12 +45,19 @@ public class ProductService {
                 .map(RelatedProductDTO::new)
                 .collect(Collectors.toList());
 
+        // Obtener precios por tamaño desde la tabla product_size_pricing
         List<SizeDTO> sizesDTO = product.getSizes().stream()
-                .map(size -> new SizeDTO(
-                        size.getId(),
-                        size.getName(),
-                        size.getDimension()
-                ))
+                .map(size -> {
+                    // Buscar el precio específico para este producto y tamaño
+                    BigDecimal sizePrice = productRepository.findPriceForSize(product.getId(), size.getId())
+                            .orElse(product.getPrice()); // Fallback al precio del producto
+                    return new SizeDTO(
+                            size.getId(),
+                            size.getName(),
+                            size.getDimension(),
+                            sizePrice
+                    );
+                })
                 .collect(Collectors.toList());
 
         return new ProductDetailResponse(
@@ -170,5 +178,31 @@ public class ProductService {
         product.setStatus(false);
         productRepository.save(product);
         logger.info("Producto inactivo: {}", id);
+    }
+
+    /**
+     * Obtiene todos los productos activos para el home
+     * Retorna todos los productos con status activo
+     */
+    public List<HomeProductDTO> getFeaturedHomeProducts() {
+        logger.info("Obteniendo todos los productos activos para home");
+        
+        List<Product> allProducts = productRepository.findByStatusTrue();
+        
+        return allProducts.stream().map(product -> {
+            String shortDesc = product.getShortDescription() != null 
+                    ? product.getShortDescription() 
+                    : "Hermosa pieza de ceramica artesanal de la coleccion El Mundo de Mery";
+            String categoryLabel = product.getCategory() != null ? product.getCategory().getLabel() : "";
+            
+            return new HomeProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getImageUrl(),
+                    shortDesc,
+                    categoryLabel
+            );
+        }).collect(Collectors.toList());
     }
 }

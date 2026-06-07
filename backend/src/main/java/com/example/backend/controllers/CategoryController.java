@@ -39,4 +39,15 @@ public class CategoryController {
         List<CategoryDTO> response = categoryService.getHomeCategories();
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Endpoint para obtener categorías del home
+     * Retorna: nombre, imagen, descripción corta
+     * GET /api/categories/home
+     */
+    @GetMapping("/home")
+    public ResponseEntity<List<CategoryDTO>> getHomeCategories() {
+        List<CategoryDTO> response = categoryService.getHomeCategories();
+        return ResponseEntity.ok(response);
+    }
 }

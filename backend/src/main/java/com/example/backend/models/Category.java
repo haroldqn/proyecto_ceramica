@@ -1,6 +1,7 @@
 package com.example.backend.models;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +33,7 @@ public class Category {
 
     @Column(nullable = false)
     private boolean eventStatus;
+
+    @Column(name = "precio_base", precision = 10, scale = 2)
+    private BigDecimal precioBase;
 }

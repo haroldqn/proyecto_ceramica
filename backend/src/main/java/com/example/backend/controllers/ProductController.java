@@ -3,6 +3,7 @@ package com.example.backend.controllers;
 import com.example.backend.models.Product;
 import com.example.backend.repositories.ProductRepository;
 import com.example.backend.dto.ProductDetailResponse;
+import com.example.backend.dto.HomeProductDTO;
 import com.example.backend.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,17 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetailResponse> getProduct(@PathVariable Long id) {
         ProductDetailResponse response = productService.getProductDetailsById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Endpoint para obtener productos destacados del home
+     * Retorna 5 productos, uno por cada categoría
+     * GET /api/products/home
+     */
+    @GetMapping("/home")
+    public ResponseEntity<List<HomeProductDTO>> getFeaturedHomeProducts() {
+        List<HomeProductDTO> response = productService.getFeaturedHomeProducts();
         return ResponseEntity.ok(response);
     }
 }

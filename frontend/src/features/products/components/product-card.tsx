@@ -21,16 +21,20 @@ type Props = {
 };
 
 export default function ProductCard(props: Props) {
-  const { producto } = props;
+  const { producto, user, onRequireAuth } = props;
   const router = useRouter();
 
   const handleComprar = () => {
     console.log("ID del producto:", producto.id);
+    if (!user) {
+      onRequireAuth();
+      return;
+    }
     router.push(`/producto/${producto.id}`);
   };
 
   return (
-    <article className="group rounded-[2rem] border border-[--border-soft] bg-[--surface] p-4 shadow-[0_18px_45px_rgba(77,50,36,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(77,50,36,0.14)]">
+    <article className="group flex flex-col rounded-[2rem] border border-[--border-soft] bg-[--surface] p-4 shadow-[0_18px_45px_rgba(77,50,36,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(77,50,36,0.14)]">
       <div
         className="image-card relative overflow-hidden rounded-[1.6rem]"
         style={{
@@ -38,7 +42,7 @@ export default function ProductCard(props: Props) {
         }}
       >
         <span className="absolute left-4 top-4 z-10 inline-flex rounded-full border border-white/35 bg-[rgba(37,23,15,0.48)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-white backdrop-blur-sm">
-          {producto.etiqueta}
+          {producto.etiqueta.toUpperCase()}
         </span>
 
         <Image
@@ -51,7 +55,7 @@ export default function ProductCard(props: Props) {
         />
       </div>
 
-      <div className="space-y-4 px-2 pb-2 pt-5">
+      <div className="flex flex-col flex-grow px-2 pb-2 pt-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="font-display text-3xl text-[--foreground]">{producto.nombre}</h3>
@@ -60,11 +64,11 @@ export default function ProductCard(props: Props) {
           <p className="text-base font-semibold text-[--foreground]">S/{producto.precio}</p>
         </div>
 
-        <p className="text-sm leading-6 text-[--muted]">{producto.descripcion}</p>
+        <p className="mt-4 flex-grow text-sm leading-6 text-[--muted]">{producto.descripcion}</p>
 
         <button
           onClick={handleComprar}
-          className="button-primary inline-flex w-full cursor-pointer items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-black"
+          className="button-primary mt-4 inline-flex w-full cursor-pointer items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-black"
         >
           Comprar
         </button>

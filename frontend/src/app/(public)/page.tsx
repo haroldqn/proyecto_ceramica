@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import { useState, useEffect } from "react";
 import AuthModal from "@/features/auth/components/auth-modal";
@@ -20,9 +20,11 @@ export default function Home() {
   const [productos, setProductos] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/products")
+    fetch("http://localhost:8080/api/products/home")
       .then((res) => res.json())
-      .then((data) => setProductos(data))
+      .then((data) => {
+        setProductos(data);
+      })
       .catch((error) => console.error("Error al cargar productos:", error));
   }, []);
 
@@ -94,13 +96,17 @@ export default function Home() {
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {productos.map((p) => (
                 <ProductCard
-                  key={p.id_product}
+                  key={p.id}
                   producto={{
-                    id: p.id_product,
+                    id: p.id,
                     nombre: p.name,
                     precio: p.price,
-                    imageUrl: p.image_url,
-                    stock: p.stock,
+                    descripcion: p.shortDescription || "Hermosa pieza de ceramica artesanal de la coleccion El Mundo de Mery",
+                    etiqueta: "NUEVO",
+                    formato: "Pieza unica",
+                    tonos: ["#D4A574", "#C4956A"],
+                    image: p.imageUrl || "/categorias/default.webp",
+                    alt: p.name || "Producto de ceramica",
                   }}
                   user={user}
                   onRequireAuth={() => setShowModal(true)}
