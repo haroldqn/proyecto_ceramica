@@ -8,38 +8,36 @@ import { Chart } from "chart.js/auto";
 
 export default function AdminDashboardPage() {
     const [productCount, setProductCount] = useState<number>(0);
-    const [userCount, setUserCount] = useState<number>(3); // ESte dato es temporal....
-    const [salesCount, setSalesCount] = useState<number>(7); // Lo mismo con este :v
+    const [userCount, setUserCount] = useState<number>(0);
+    const [salesCount, setSalesCount] = useState<number>(300); // Este dato es temporal :v
+    const [pendingOrdersCount, setPendingOrdersCount] = useState<number>(12); // lo mismo con este, sino saldría 0
     const [loading, setLoading] = useState(true);
 
+    // Estados dinámicos para las etiquetas y valores del gráfico de inventario
     const [categoryLabels, setCategoryLabels] = useState<string[]>([]);
     const [categoryStocks, setCategoryStocks] = useState<number[]>([]);
 
+    // Solo el gráfico de inventario
     const inventoryChartRef = useRef<HTMLCanvasElement | null>(null);
-
     const inventoryChartInstance = useRef<Chart | null>(null);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
                 setLoading(true);
-
                 const [products, users] = await Promise.all([
                     adminService.getProducts(),
                     adminService.getUsers()
                 ]);
 
-                // ESTO ES LA SUMA DEL STOCK TOTAL PARA QUE SE VEA EN INVENTARIO
                 const totalStock = products.reduce((accumulator, product) => {
                     return accumulator + (product.stock || 0);
                 }, 0);
 
                 const inventoryMap: { [key: string]: number } = {};
-                
                 products.forEach(product => {
                     const categoryName = product.categoryName || "Sin Categoría";
                     const stock = product.stock || 0;
-                    
                     if (inventoryMap[categoryName]) {
                         inventoryMap[categoryName] += stock;
                     } else {
@@ -47,12 +45,10 @@ export default function AdminDashboardPage() {
                     }
                 });
 
-                // Separamos las llaves (nombres) y los valores (totales) para el chart
                 setCategoryLabels(Object.keys(inventoryMap));
                 setCategoryStocks(Object.values(inventoryMap));
-
-                setProductCount(totalStock); 
-                setUserCount(users.length);   
+                setProductCount(totalStock);
+                setUserCount(users.length);
             } catch (error) {
                 console.error("Error al cargar métricas del dashboard", error);
             } finally {
@@ -67,14 +63,13 @@ export default function AdminDashboardPage() {
     useEffect(() => {
         if (loading) return;
 
-        // Gráfico 1: Distribución de Inventario 
+        // Gráfico 1: Distribución de Inventario
         if (inventoryChartRef.current && categoryLabels.length > 0) {
             if (inventoryChartInstance.current) inventoryChartInstance.current.destroy();
-
             inventoryChartInstance.current = new Chart(inventoryChartRef.current, {
                 type: "bar",
                 data: {
-                    labels: categoryLabels, 
+                    labels: categoryLabels,
                     datasets: [{
                         label: "Unidades disponibles",
                         data: categoryStocks,
@@ -85,12 +80,13 @@ export default function AdminDashboardPage() {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
+                    plugins: {
+                        legend: { display: false }
+                    }
                 }
             });
         }
 
-        // Limpieza de gráficos al desmontar el componente para evitar duplicados en memoria
         return () => {
             if (inventoryChartInstance.current) inventoryChartInstance.current.destroy();
         };
@@ -102,7 +98,7 @@ export default function AdminDashboardPage() {
 
     return (
         <div className="space-y-6">
-            {/* Encabezado*/}
+            {/* Encabezado */}
             <div>
                 <h1 className="text-2xl font-bold text-slate-950">Resumen del Sistema</h1>
                 <p className="text-sm text-[#736357] font-medium mt-1">
@@ -110,15 +106,15 @@ export default function AdminDashboardPage() {
                 </p>
             </div>
 
-            {/* Esto es el contenedor de las 3 Cards*/}
-            <div className="flex flex-col sm:flex-row gap-5 w-full max-w-5xl">
+            {/* Este es el contenedor de las 4 Cards */}
+            <div className="flex flex-col sm:flex-row gap-5 w-full">
                 <DashboardCard
-                    title="N° de Ventas"
-                    value={salesCount}
+                    title="Ventas Totales"
+                    value={`S/. ${salesCount}`}
                     iconType="sales"
                 />
                 <DashboardCard
-                    title="Clientes recientes"
+                    title="Usuarios recientes"
                     value={userCount}
                     iconType="users"
                 />
@@ -127,10 +123,15 @@ export default function AdminDashboardPage() {
                     value={productCount}
                     iconType="inventory"
                 />
+                <DashboardCard
+                    title="Pedidos pendientes"
+                    value={pendingOrdersCount}
+                    iconType="pending"
+                />
             </div>
 
-            {/* Esto contiene los Gráficos en tarjetas reutilizables */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-5xl">
+            {/* Contenedor de los gráficos */}
+            <div className="w-full">
                 <DashboardChartCard title="Distribución de Inventario" subtitle="Unidades en stock por tipo de cerámica">
                     <canvas ref={inventoryChartRef} />
                 </DashboardChartCard>

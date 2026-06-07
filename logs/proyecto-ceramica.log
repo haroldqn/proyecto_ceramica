@@ -642,3 +642,46 @@ io.jsonwebtoken.ExpiredJwtException: JWT expired at 2026-06-07T00:46:42Z. Curren
 2026-06-06T20:28:04.186-05:00  INFO 23328 --- [backend] [http-nio-8080-exec-8] c.e.backend.services.ProductService      : Producto encontrado: dasdasdsa
 2026-06-06T20:28:04.208-05:00  INFO 23328 --- [backend] [http-nio-8080-exec-10] c.e.backend.services.ProductService      : Buscando producto id 1
 2026-06-06T20:28:04.211-05:00  INFO 23328 --- [backend] [http-nio-8080-exec-10] c.e.backend.services.ProductService      : Producto encontrado: dasdasdsa
+2026-06-07T09:27:35.711-05:00  INFO 7692 --- [backend] [main] com.example.backend.BackendApplication   : Starting BackendApplication using Java 25.0.2 with PID 7692 (E:\USUARIO\Documents\GitHub\proyecto_ceramica\backend\target\classes started by DIEGO GARCIA in E:\USUARIO\Documents\GitHub\proyecto_ceramica)
+2026-06-07T09:27:35.717-05:00 DEBUG 7692 --- [backend] [main] com.example.backend.BackendApplication   : Running with Spring Boot v4.0.5, Spring v7.0.6
+2026-06-07T09:27:35.719-05:00  INFO 7692 --- [backend] [main] com.example.backend.BackendApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T09:27:37.383-05:00  INFO 7692 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T09:27:37.586-05:00  INFO 7692 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 182 ms. Found 6 JPA repository interfaces.
+2026-06-07T09:27:38.861-05:00  INFO 7692 --- [backend] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-06-07T09:27:38.895-05:00  INFO 7692 --- [backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T09:27:38.896-05:00  INFO 7692 --- [backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+2026-06-07T09:27:39.062-05:00  INFO 7692 --- [backend] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3209 ms
+2026-06-07T09:27:39.214-05:00  INFO 7692 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-07T09:27:40.176-05:00  INFO 7692 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7e94e331
+2026-06-07T09:27:40.180-05:00  INFO 7692 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-07T09:27:40.435-05:00  INFO 7692 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-07T09:27:40.562-05:00  INFO 7692 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+2026-06-07T09:27:41.803-05:00  INFO 7692 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T09:27:42.081-05:00  INFO 7692 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/ceramic_store_db?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.5
+	Default catalog/schema: ceramic_store_db/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T09:27:45.090-05:00  INFO 7692 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T09:27:45.341-05:00  INFO 7692 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T09:27:45.496-05:00  INFO 7692 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-07T09:27:45.967-05:00 DEBUG 7692 --- [backend] [main] c.e.b.config.JwtAuthenticationFilter     : Filter 'jwtAuthenticationFilter' configured for use
+2026-06-07T09:27:46.268-05:00  INFO 7692 --- [backend] [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-07T09:27:46.268-05:00  WARN 7692 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-07T09:27:46.390-05:00  WARN 7692 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T09:27:47.602-05:00  INFO 7692 --- [backend] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-06-07T09:27:47.615-05:00  INFO 7692 --- [backend] [main] com.example.backend.BackendApplication   : Started BackendApplication in 12.842 seconds (process running for 14.478)
+2026-06-07T09:30:19.579-05:00  INFO 7692 --- [backend] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-07T09:30:19.580-05:00  INFO 7692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-07T09:30:19.584-05:00  INFO 7692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2026-06-07T09:30:22.184-05:00  INFO 7692 --- [backend] [http-nio-8080-exec-3] c.e.backend.services.ProductService      : Buscando producto id 1
+2026-06-07T09:30:22.263-05:00  INFO 7692 --- [backend] [http-nio-8080-exec-3] c.e.backend.services.ProductService      : Producto encontrado: dasdasdsa
+2026-06-07T09:30:22.644-05:00  INFO 7692 --- [backend] [http-nio-8080-exec-4] c.e.backend.services.ProductService      : Buscando producto id 1
+2026-06-07T09:30:22.653-05:00  INFO 7692 --- [backend] [http-nio-8080-exec-4] c.e.backend.services.ProductService      : Producto encontrado: dasdasdsa

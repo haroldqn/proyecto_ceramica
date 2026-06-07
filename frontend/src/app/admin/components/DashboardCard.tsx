@@ -1,11 +1,11 @@
 "use client";
 
-import { FaDollarSign, FaUsers, FaBox } from "react-icons/fa";
+import { FaDollarSign, FaUsers, FaBox, FaClock } from "react-icons/fa";
 
 interface DashboardCardProps {
     title: string;
     value: number | string;
-    iconType: "sales" | "users" | "inventory";
+    iconType: "sales" | "users" | "inventory" | "pending";
 }
 
 export default function DashboardCard({ title, value, iconType }: DashboardCardProps) {
@@ -13,6 +13,7 @@ export default function DashboardCard({ title, value, iconType }: DashboardCardP
         sales: <FaDollarSign className="w-8 h-8 text-black" />,
         users: <FaUsers className="w-8 h-8 text-black" />,
         inventory: <FaBox className="w-8 h-8 text-black" />,
+        pending: <FaClock className="w-8 h-8 text-black" />,
     };
 
     return (
