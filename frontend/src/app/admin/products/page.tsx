@@ -20,6 +20,8 @@ export default function AdminProductsPage() {
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState<AdminProductResponse | null>(null);
+  
+  const [isExporting, setIsExporting] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -78,6 +80,28 @@ export default function AdminProductsPage() {
     setIsModalOpen(true);
   };
 
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+      const response = await fetch("http://localhost:8080/api/excel/products"); 
+      if (!response.ok) throw new Error("Error al exportar");
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `productos_${Date.now()}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert("Hubo un problema al exportar el Excel");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   if (loading) {
     return <div className="text-slate-500">Cargando productos...</div>;
   }
@@ -90,12 +114,22 @@ export default function AdminProductsPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold text-slate-900">Gestion de Productos</h1>
-        <button
-          onClick={openNewModal}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
-        >
-          + Nuevo Producto
-        </button>
+        
+        <div className="flex gap-3">
+          <button
+            onClick={handleExport}
+            disabled={isExporting}
+            className="rounded-lg bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+          >
+            {isExporting ? "Exportando..." : "Exportar a Excel"}
+          </button>
+          <button
+            onClick={openNewModal}
+            className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+          >
+            + Nuevo Producto
+          </button>
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
