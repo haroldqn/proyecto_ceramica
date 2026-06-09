@@ -32,7 +32,10 @@ public class TestAdminController implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // Método vacío - se ha eliminado la salida por consola
+        System.out.println("========================================");
+        System.out.println("INICIANDO VERIFICACIÓN DE USUARIO ADMIN");
+        System.out.println("========================================");
+        crearAdmin();
     }
 
     @Transactional
@@ -108,4 +111,4 @@ public class TestAdminController implements CommandLineRunner {
             throw e;
         }
     }
-}
+} 
