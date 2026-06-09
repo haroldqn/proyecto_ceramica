@@ -1,4 +1,4 @@
-package com.example.backend.controllers;
+package com.example.backend.controller;
 
 import com.example.backend.dto.AdminProductResponse;
 import com.example.backend.dto.AdminUserResponse;

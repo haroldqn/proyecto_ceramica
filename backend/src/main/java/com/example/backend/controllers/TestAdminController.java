@@ -1,4 +1,4 @@
-package com.example.backend.controller;
+package com.example.backend.controllers;
 
 import com.example.backend.models.Persona;
 import com.example.backend.models.Role;
