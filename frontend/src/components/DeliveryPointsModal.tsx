@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import "leaflet/dist/leaflet.css";
 
 export interface DeliveryPoint {
   name: string;
@@ -64,43 +65,84 @@ const points: DeliveryPoint[] = [
 
 function LeafletMap({ points: mapPoints, selected }: { points: DeliveryPoint[]; selected: DeliveryPoint | null }) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [mapInstance, setMapInstance] = useState<any>(null);
-  const [leafletL, setLeafletL] = useState<any>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     const initMap = async () => {
-      const leaflet = await import("leaflet");
-      const L = leaflet.default;
-      setLeafletL(L);
+      try {
+        const leaflet = await import("leaflet");
+        const L = leaflet.default;
 
-      delete (L.Icon.Default.prototype as any)._getIconUrl;
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-        iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-        shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-      });
+        if (!isMounted || !mapRef.current) return;
 
-      if (mapRef.current && !mapInstance) {
-        const map = L.map(mapRef.current).setView([-12.05, -76.95], 12);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
+        // Configurar iconos por defecto
+        delete (L.Icon.Default.prototype as any)._getIconUrl;
+        L.Icon.Default.mergeOptions({
+          iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+          iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+          shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+        });
 
-        setMapInstance(map);
+        // Crear mapa solo si no existe
+        if (!mapInstanceRef.current) {
+          const map = L.map(mapRef.current).setView([-12.05, -76.95], 12);
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+          }).addTo(map);
+
+          mapInstanceRef.current = map;
+          setIsMapReady(true);
+        }
+      } catch (error) {
+        console.error("Error initializing Leaflet map:", error);
       }
     };
 
     initMap();
-  }, [mapInstance]);
 
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Actualizar marcadores cuando cambian los puntos o el seleccionado
   useEffect(() => {
-    if (mapInstance && leafletL) {
-      mapPoints.forEach((p) => {
-        const marker = leafletL.marker([p.lat, p.lng]).addTo(mapInstance);
-        marker.bindPopup(`${p.name}<br>${p.address}`);
-      });
-    }
-  }, [mapInstance, leafletL, mapPoints]);
+    if (!isMapReady || !mapInstanceRef.current) return;
+
+    const L = (window as any).L;
+    const map = mapInstanceRef.current;
+
+    // Limpiar marcadores existentes
+    markersRef.current.forEach((marker) => {
+      map.removeLayer(marker);
+    });
+    markersRef.current = [];
+
+    // Agregar nuevos marcadores
+    mapPoints.forEach((p) => {
+      const marker = L.marker([p.lat, p.lng]).addTo(map);
+      marker.bindPopup(`${p.name}<br>${p.address}`);
+
+      // Si está seleccionado, abrir popup y hacer zoom
+      if (selected && selected.name === p.name) {
+        marker.openPopup();
+        map.setView([p.lat, p.lng], 14);
+      }
+
+      markersRef.current.push(marker);
+    });
+
+    // Invalidar tamaño del mapa para asegurar renderizado correcto
+    setTimeout(() => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.invalidateSize();
+      }
+    }, 100);
+  }, [mapPoints, selected, isMapReady]);
 
   return React.createElement("div", { ref: mapRef, className: "h-full w-full rounded" });
 }
