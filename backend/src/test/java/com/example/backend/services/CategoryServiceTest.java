@@ -90,7 +90,7 @@ class CategoryServiceTest {
 
     // borrar test
     @Test
-    void deleteCategory_ShouldDelete_WhenCategoryExists() {
+    void deleteCategory_WhenCategoryExists() {
         Long categoryId = 1L;
         Category existingCategory = new Category();
         existingCategory.setId(categoryId);

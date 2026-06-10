@@ -36,27 +36,51 @@ export interface AdminCategoryResponse {
   label: string;
 }
 
+export interface AdminCategoryRequest {
+  label: string;
+  categoryName: string;
+  description: string;
+  imageUrl: string;
+}
+
 export const adminService = {
   getUsers: () => apiRequest<AdminUserResponse[]>("/api/admin/users"),
 
+  getProducts: () => apiRequest<AdminProductResponse[]>("/api/admin/products"),
+
+  createProduct: (data: AdminProductRequest) =>
+    apiRequest<AdminProductResponse>("/api/admin/products", {
+      method: "POST",
+      body: data
+    }),
+
+  updateProduct: (id: number, data: AdminProductRequest) =>
+    apiRequest<AdminProductResponse>(`/api/admin/products/${id}`, {
+      method: "PUT",
+      body: data
+    }),
+
+  deleteProduct: (id: number) =>
+    apiRequest<void>(`/api/admin/products/${id}`, {
+      method: "DELETE"
+    }),
+
   getCategories: () => apiRequest<AdminCategoryResponse[]>("/api/categories/list"),
 
-  getProducts: () => apiRequest<AdminProductResponse[]>("/api/admin/products"),
-  
-  createProduct: (data: AdminProductRequest) => 
-    apiRequest<AdminProductResponse>("/api/admin/products", { 
-      method: "POST", 
-      body: data 
+  createCategory: (data: AdminCategoryRequest) =>
+    apiRequest<AdminCategoryResponse>("/api/categories", {
+      method: "POST",
+      body: data
     }),
-    
-  updateProduct: (id: number, data: AdminProductRequest) => 
-    apiRequest<AdminProductResponse>(`/api/admin/products/${id}`, { 
-      method: "PUT", 
-      body: data 
+
+  updateCategory: (id: number, data: AdminCategoryRequest) =>
+    apiRequest<AdminCategoryResponse>(`/api/categories/${id}`, {
+      method: "PUT",
+      body: data
     }),
-    
-  deleteProduct: (id: number) => 
-    apiRequest<void>(`/api/admin/products/${id}`, { 
-      method: "DELETE" 
+
+  deleteCategory: (id: number) =>
+    apiRequest<void>(`/api/categories/${id}`, {
+      method: "DELETE"
     }),
 };

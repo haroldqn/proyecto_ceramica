@@ -53,6 +53,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Inicio", href: "/admin/dashboard" },
     { name: "Usuarios", href: "/admin/users" },
     { name: "Productos", href: "/admin/productos" },
+    { name: "Categorias", href: "/admin/categories" },
   ];
 
   return (

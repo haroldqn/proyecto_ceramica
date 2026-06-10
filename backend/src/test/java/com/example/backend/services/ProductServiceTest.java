@@ -32,7 +32,7 @@ class ProductServiceTest {
 
 //    crear test
     @Test
-    void createProduct_ShouldSaveAndReturnResponse() {
+    void createProduct() {
         ProductRequest request = new ProductRequest();
         request.setName("Jarrón");
         request.setCategoryId(1L);
@@ -59,7 +59,7 @@ class ProductServiceTest {
 
 //    actualizar test
     @Test
-    void updateProduct_ShouldUpdateAndReturnResponse_WhenValidRequest() {
+    void updateProduct_WhenValidRequest() {
         Long productId = 1L;
         ProductRequest request = new ProductRequest();
         request.setName("Plato Actualizado");
@@ -89,7 +89,7 @@ class ProductServiceTest {
 
 //    borrar test
     @Test
-    void deleteProduct_ShouldSetStatusToFalse_WhenProductExists() {
+    void deleteProduct_WhenProductExists() {
         Long productId = 1L;
         Product activeProduct = new Product();
         activeProduct.setId(productId);
