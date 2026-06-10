@@ -27,11 +27,11 @@ public class AdminController {
         return userRepository.findAll()
                 .stream()
                 .map(user -> new AdminUserResponse(
-                user.getId(),
-                user.getPersona().getName(),
-                user.getEmail(),
-                user.getRole().getName()
-        )).toList();
+                        user.getId(),
+                        user.getPersona().getName(),
+                        user.getEmail(),
+                        user.getRole().getName()
+                )).toList();
     }
 
     // Rutas de Producto

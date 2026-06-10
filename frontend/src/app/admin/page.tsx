@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
       localStorage.setItem("user", JSON.stringify({ name: data.name, role: data.role }));
       notifyAuthChanged();
       toast.success(`Bienvenido ${data.name}`);
-      router.replace("/admin/productos");
+      router.replace("/admin/dashboard");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Error al iniciar sesion";
       setError(message);

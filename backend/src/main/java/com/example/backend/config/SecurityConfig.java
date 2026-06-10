@@ -44,6 +44,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/personas/**").permitAll()
                         .requestMatchers("/api/products/**").permitAll()
                         .requestMatchers("/api/categories", "/api/categories/**").permitAll()
+                        .requestMatchers("/api/excel/**").permitAll()
+                        .requestMatchers("/api/categories", "/api/categories/**").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Solo para ADMIN
 

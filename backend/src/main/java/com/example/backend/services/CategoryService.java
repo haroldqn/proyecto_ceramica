@@ -21,6 +21,62 @@ public class CategoryService {
     @Autowired
     private ProductRepository productRepository;
 
+    public List<CategoryDTO> getAllCategories() {
+        return categoryRepository.findAll().stream().map(category -> new CategoryDTO(
+                category.getId(),
+                category.getLabel(),
+                category.getName(),
+                category.getDescription(),
+                category.getImageUrl()
+        )).toList();
+    }
+
+    public CategoryDTO createCategory(CategoryDTO request) {
+        Category category = new Category();
+        category.setLabel(request.getLabel());
+        category.setName(request.getCategoryName());
+        category.setDescription(request.getDescription());
+        category.setImageUrl(request.getImageUrl());
+        category.setEventStatus(true);
+
+        Category savedCategory = categoryRepository.save(category);
+
+        return new CategoryDTO(
+                savedCategory.getId(),
+                savedCategory.getLabel(),
+                savedCategory.getName(),
+                savedCategory.getDescription(),
+                savedCategory.getImageUrl()
+        );
+    }
+
+    public CategoryDTO updateCategory(Long id, CategoryDTO request) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No existe la categoria"));
+
+        category.setLabel(request.getLabel());
+        category.setName(request.getCategoryName());
+        category.setDescription(request.getDescription());
+        category.setImageUrl(request.getImageUrl());
+
+        Category updatedCategory = categoryRepository.save(category);
+
+        return new CategoryDTO(
+                updatedCategory.getId(),
+                updatedCategory.getLabel(),
+                updatedCategory.getName(),
+                updatedCategory.getDescription(),
+                updatedCategory.getImageUrl()
+        );
+    }
+
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
+        categoryRepository.delete(category);
+    }
+
     public List<CategoryShowcaseDTO> getHomeCategoriesWithProducts() {
         List<Category> homeCategories = categoryRepository.findByEventStatusTrue();
 
